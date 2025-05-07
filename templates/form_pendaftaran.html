@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulir Pendaftaran</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Formulir Pendaftaran</h2>
+    <form method="POST" enctype="multipart/form-data">
+      <label>Nama Lengkap:</label>
+      <input type="text" name="nama_lengkap" required>
+
+      <label>Asal Sekolah:</label>
+      <input type="text" name="asal_sekolah" required>
+
+      <label>Nama Orang Tua:</label>
+      <input type="text" name="nama_ortu" required>
+
+      <label>Alamat:</label>
+      <input type="text" name="alamat" required>
+
+      <label for="tahun_lulus">Tahun Lulus:</label>
+      <input type="text" name="tahun_lulus" id="tahun_lulus" required>
+
+      <label for="jurusan">Jurusan:</label>
+      <select name="jurusan" id="jurusan" required>
+        <option value="">-- Pilih Jurusan --</option>
+        <option value="IPA">IPA</option>
+        <option value="IPS">IPS</option>
+        <option value="Bahasa">Bahasa</option>
+      </select>
+     
+      <label for="waktu_kuliah">Waktu Kuliah:</label>
+      <select name="waktu_kuliah" id="waktu_kuliah" required>
+        <option value="">-- Pilih Waktu --</option>
+        <option value="Pagi">Pagi</option>
+        <option value="Siang">Siang</option>
+        <option value="Malam">Malam</option>
+      </select>
+
+      <label for="gelombang">Gelombang:</label>
+      <select name="gelombang" id="gelombang" required>
+         <option value="">-- Pilih Gelombang --</option>
+         <option value="Gelombang 1">Gelombang 1</option>
+         <option value="Gelombang 2">Gelombang 2</option>
+         <option value="Gelombang 3">Gelombang 3</option>
+      </select>
+
+      <label for="foto">Pas Foto:</label>
+      <input type="file" name="foto" id="foto" accept="image/*" required>
+
+      <label for="ijazah">Ijazah:</label>
+      <input type="file" name="ijazah" id="ijazah" accept=".pdf,image/*" required>
+
+      <button type="submit">Kirim</button>
+    </form>
+  </div>
+</body>
+</html>

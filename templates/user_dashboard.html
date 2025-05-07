@@ -1,0 +1,43 @@
+<!-- templates/user_dashboard.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Pengguna</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Selamat Datang di Dashboard Anda</h1>
+        
+        <div class="user-info">
+            <h2>Data Pengguna:</h2>
+            <ul>
+                <li>Nama Lengkap: {{ current_user.nama_lengkap }}</li>
+                <li>Alamat: {{ current_user.alamat }}</li>
+                <li>No HP: {{ current_user.no_hp }}</li>
+            </ul>
+        </div>
+
+        {% if pendaftaran %}
+            <div class="pendaftaran-info">
+                <h2>Status Pendaftaran:</h2>
+                <ul>
+                    <li>Asal Sekolah: {{ pendaftaran.asal_sekolah }}</li>
+                    <li>Jurusan: {{ pendaftaran.jurusan }}</li>
+                    <li>Waktu Kuliah: {{ pendaftaran.waktu_kuliah }}</li>
+                    <li>Gelombang: {{ pendaftaran.gelombang }}</li>
+                    <li>Status: {{ pendaftaran.status_pendaftaran }}</li>
+                </ul>
+            </div>
+        {% else %}
+            <p>Anda belum mengisi formulir pendaftaran. Silakan isi terlebih dahulu.</p>
+            <a href="{{ url_for('form_pendaftaran') }}" class="btn">Isi Formulir Pendaftaran</a>
+        {% endif %}
+        
+        <div class="logout">
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

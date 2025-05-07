@@ -1,0 +1,27 @@
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+
+db = SQLAlchemy()
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(100))
+    nama_lengkap = db.Column(db.String(100))
+    no_hp = db.Column(db.String(20))
+    alamat = db.Column(db.Text)
+    pendaftaran = db.relationship('Pendaftaran', backref='user', uselist=False)
+
+class Pendaftaran(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    asal_sekolah = db.Column(db.String(100))
+    tahun_lulus = db.Column(db.String(4))
+    jurusan = db.Column(db.String(100))
+    waktu_kuliah = db.Column(db.String(50))
+    status_pendaftaran = db.Column(db.String(20), default='pending')  # pending / diterima / ditolak
+    status_pembayaran = db.Column(db.String(20), default='belum')     # belum / sudah
+    progress = db.Column(db.Integer, default=40)
+    gelombang = db.Column(db.String(10))
+    foto = db.Column(db.String(100))
+    ijazah = db.Column(db.String(100))

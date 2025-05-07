@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form method="POST">
+      <label>Username:</label><input type="text" name="username" required><br>
+      <label>Password:</label><input type="password" name="password" required><br>
+      <button type="submit">Login</button>
+    </form>
+    {% if is_admin %}
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary">Go to Admin Dashboard</a>
+    {% endif %}
+  </div>
+</body>
+</html>
