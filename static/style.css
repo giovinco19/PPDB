@@ -4,7 +4,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: auto;
+    min-height: 100vh;
+    padding: 20px 0;
     margin: 0;
   }
   
@@ -15,6 +17,10 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    margin: 20px auto;
+    height: auto;
+    min-height: auto;
+    overflow-y: auto;
   }
   
   h2 {
@@ -88,4 +94,177 @@ body {
 
   .btn:hover {
     background-color: #0056b3;
+  }
+
+  /* Modern Form Styles */
+  .form-modern {
+    max-width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #ffffff;
+  }
+
+  .form-control:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    outline: none;
+  }
+
+  textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .form-modern label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2d3748;
+    font-weight: 500;
+  }
+
+  /* Home Page Styles */
+  .home-container {
+    max-width: 800px !important;
+  }
+
+  .welcome-card {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .steps-container {
+    margin: 2rem 0;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .step {
+    padding: 1.5rem;
+    background: rgba(67, 97, 238, 0.1);
+    border-radius: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .step:hover {
+    transform: translateY(-5px);
+  }
+
+  .step i {
+    font-size: 2rem;
+    color: #4361ee;
+    margin-bottom: 1rem;
+  }
+
+  .step p {
+    color: #2d3748;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .btn {
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: #4361ee;
+    color: white;
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #4361ee;
+    color: #4361ee;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+  }
+
+  .form-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .form-footer a {
+    color: #4361ee;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .form-footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Card Styles */
+  .card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 30px;
+  }
+
+  /* Register Page Specific Styles */
+  .register-container {
+    min-height: 100vh;
+    max-width: 600px !important;
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #4361ee;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-submit:hover {
+    background: #3451db;
+    transform: translateY(-2px);
+  }
+
+  /* Alert styles */
+  .alert {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
   }

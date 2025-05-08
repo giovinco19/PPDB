@@ -4,6 +4,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from models import db, User, Pendaftaran
+from functools import wraps
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = 'rahasia'
@@ -12,6 +14,7 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -25,6 +28,15 @@ def allowed_file(filename):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or not current_user.is_admin():
+            flash('Anda tidak memiliki akses ke halaman ini.')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/')
 def home():
@@ -53,12 +65,11 @@ def login():
         user = User.query.filter_by(username=request.form['username']).first()
         if user and check_password_hash(user.password, request.form['password']):
             login_user(user)
-            if user.username == 'admin':
+            if user.is_admin():
                 return redirect(url_for('admin_dashboard'))
             return redirect(url_for('dashboard'))
         flash('Username atau password salah.')
-    is_admin = current_user.is_authenticated and current_user.username == 'admin'
-    return render_template('login.html', is_admin=is_admin)
+    return render_template('login.html')
 
 @app.route('/logout')
 @login_required
@@ -133,17 +144,15 @@ def form_pendaftaran():
 
 @app.route('/admin/dashboard')
 @login_required
+@admin_required
 def admin_dashboard():
-    if current_user.username != 'admin':
-        return "Akses ditolak", 403
     data = Pendaftaran.query.all()
     return render_template('admin_dashboard.html', data=data)
 
 @app.route('/admin/approve/<int:id>')
 @login_required
+@admin_required
 def approve(id):
-    if current_user.username != 'admin':
-        return "Akses ditolak", 403
     pendaftaran = Pendaftaran.query.get_or_404(id)
     pendaftaran.status_pendaftaran = 'diterima'
     db.session.commit()
@@ -152,9 +161,8 @@ def approve(id):
 
 @app.route('/admin/reject/<int:id>')
 @login_required
+@admin_required
 def reject(id):
-    if current_user.username != 'admin':
-        return "Akses ditolak", 403
     pendaftaran = Pendaftaran.query.get_or_404(id)
     pendaftaran.status_pendaftaran = 'ditolak'
     db.session.commit()
@@ -163,45 +171,30 @@ def reject(id):
 
 @app.route('/admin/detail/<int:id>')
 @login_required
+@admin_required
 def detail_pendaftaran(id):
-    if current_user.username != 'admin':
-        return "Akses ditolak", 403
     pendaftaran = Pendaftaran.query.get_or_404(id)
     return render_template('detail_pendaftaran.html', pendaftaran=pendaftaran)
 
 @app.route('/admin/verifikasi')
 @login_required
+@admin_required
 def verifikasi_user():
-    if current_user.username != 'admin':
-        return "Akses ditolak", 403
     # Get pending applications
     pending_data = Pendaftaran.query.filter_by(status_pendaftaran='pending').all()
     return render_template('verifikasi_user.html', data=pending_data)
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    if current_user.is_authenticated and current_user.username == 'admin':
+    if current_user.is_authenticated and current_user.is_admin():
         return redirect(url_for('admin_dashboard'))
         
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         
-        # Ganti dengan kredensial admin yang sesuai
-        if username == 'admin' and password == 'admin123':
-            user = User.query.filter_by(username='admin').first()
-            if not user:
-                # Buat user admin jika belum ada
-                user = User(
-                    username='admin',
-                    password=generate_password_hash('admin123'),
-                    nama_lengkap='Administrator',
-                    no_hp='0',
-                    alamat='Admin Address'
-                )
-                db.session.add(user)
-                db.session.commit()
-            
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password) and user.is_admin():
             login_user(user)
             flash('Login admin berhasil!')
             return redirect(url_for('admin_dashboard'))

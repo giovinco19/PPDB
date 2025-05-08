@@ -2,16 +2,56 @@
 <html>
 <head>
   <title>Register</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h2>Register</h2>
-  <form method="POST">
-    <label>Username:</label><input type="text" name="username" required><br>
-    <label>Password:</label><input type="password" name="password" required><br>
-    <label>Nama Lengkap:</label><input type="text" name="nama_lengkap" required><br>
-    <label>No HP:</label><input type="text" name="no_hp" required><br>
-    <label>Alamat:</label><textarea name="alamat" required></textarea><br>
-    <button type="submit">Register</button>
-  </form>
+  <div class="container register-container">
+    <h2>Pendaftaran Akun</h2>
+    <div class="card">
+      <form method="POST" class="form-modern">
+        <div class="form-group">
+          <label>Nama Lengkap</label>
+          <input type="text" name="nama_lengkap" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label>No HP</label>
+          <input type="text" name="no_hp" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Alamat</label>
+          <textarea name="alamat" required class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tempat Lahir</label>
+          <input type="text" name="tempat_lahir" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Lahir</label>
+          <input type="date" name="tanggal_lahir" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Tahun Lahir</label>
+          <input type="text" name="tahun_lahir" required class="form-control" maxlength="4" placeholder="Contoh: 2000">
+        </div>
+        <div class="form-group">
+          <label>No. Telepon Orang Tua</label>
+          <input type="text" name="no_telp_ortu" required class="form-control" placeholder="Contoh: 08123456789">
+        </div>
+        <button type="submit" class="btn-submit">Register</button>
+      </form>
+      <div class="form-footer">
+        <p>Sudah punya akun? <a href="{{ url_for('login') }}">Login</a></p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

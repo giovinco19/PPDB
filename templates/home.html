@@ -2,18 +2,44 @@
 <html>
 <head>
   <title>PPDB - Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <h2>Selamat Datang di PPDB</h2>
-  <p>Langkah-langkah pendaftaran:</p>
-  <ol>
-    <li>Register akun Anda</li>
-    <li>Login ke sistem</li>
-    <li>Isi formulir pendaftaran</li>
-    <li>Upload pas foto dan ijazah</li>
-    <li>Tunggu konfirmasi dari admin</li>
-  </ol>
-  <a href="{{ url_for('register') }}">Register</a> | 
-  <a href="{{ url_for('login') }}">Login</a>
+  <div class="container home-container">
+    <div class="card welcome-card">
+      <h1>Selamat Datang di PPDB</h1>
+      <div class="steps-container">
+        <h3>Langkah-langkah pendaftaran:</h3>
+        <div class="steps">
+          <div class="step">
+            <i class="fas fa-user-plus"></i>
+            <p>Register akun Anda</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-sign-in-alt"></i>
+            <p>Login ke sistem</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-file-alt"></i>
+            <p>Isi formulir pendaftaran</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-upload"></i>
+            <p>Upload pas foto dan ijazah</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-clock"></i>
+            <p>Tunggu konfirmasi dari admin</p>
+          </div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline">Login</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

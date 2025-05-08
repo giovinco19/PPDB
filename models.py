@@ -10,7 +10,11 @@ class User(db.Model, UserMixin):
     nama_lengkap = db.Column(db.String(100))
     no_hp = db.Column(db.String(20))
     alamat = db.Column(db.Text)
+    role = db.Column(db.String(20), default='user')  # 'admin' or 'user'
     pendaftaran = db.relationship('Pendaftaran', backref='user', uselist=False)
+
+    def is_admin(self):
+        return self.role == 'admin'
 
 class Pendaftaran(db.Model):
     id = db.Column(db.Integer, primary_key=True)
