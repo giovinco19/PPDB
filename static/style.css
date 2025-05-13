@@ -268,3 +268,23 @@ body {
     color: #856404;
     border: 1px solid #ffeeba;
   }
+
+  /* SweetAlert2 Custom Styles */
+  .swal2-popup {
+    font-family: 'Inter', sans-serif;
+    border-radius: 1rem;
+  }
+
+  .swal2-title {
+    color: #2d3748;
+    font-weight: 600;
+  }
+
+  .swal2-content {
+    color: #4a5568;
+  }
+
+  .swal2-confirm {
+    border-radius: 0.5rem !important;
+    font-weight: 500 !important;
+  }

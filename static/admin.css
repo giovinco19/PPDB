@@ -55,6 +55,7 @@ body {
     flex: 1;
     margin-left: 250px;
     padding: 20px;
+    overflow-x: auto;
 }
 
 .dashboard-card {
@@ -74,23 +75,15 @@ body {
 
 .table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
-.table th {
-    background: #f8f9fa;
-    color: #2c3e50;
-    font-weight: 600;
-    padding: 15px;
+.table th, .table td {
+    padding: 12px 15px;
     text-align: left;
-    border-bottom: 2px solid #e9ecef;
-}
-
-.table td {
-    padding: 15px;
-    border-bottom: 1px solid #e9ecef;
-    color: #2d3436;
+    white-space: nowrap;
+    min-width: 100px;
 }
 
 .table tr:hover {

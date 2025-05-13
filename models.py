@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     no_hp = db.Column(db.String(20))
     alamat = db.Column(db.Text)
     role = db.Column(db.String(20), default='user')  # 'admin' or 'user'
+    email = db.Column(db.String(120), unique=True)
     pendaftaran = db.relationship('Pendaftaran', backref='user', uselist=False)
 
     def is_admin(self):
@@ -19,13 +20,19 @@ class User(db.Model, UserMixin):
 class Pendaftaran(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    nama_lengkap = db.Column(db.String(100))
     asal_sekolah = db.Column(db.String(100))
+    nama_ortu = db.Column(db.String(100))
+    alamat = db.Column(db.Text)
+    tempat_lahir = db.Column(db.String(100))
+    tanggal_lahir = db.Column(db.String(10))
+    jenis_kelamin = db.Column(db.String(10))
     tahun_lulus = db.Column(db.String(4))
     jurusan = db.Column(db.String(100))
     waktu_kuliah = db.Column(db.String(50))
-    status_pendaftaran = db.Column(db.String(20), default='pending')  # pending / diterima / ditolak
-    status_pembayaran = db.Column(db.String(20), default='belum')     # belum / sudah
+    gelombang = db.Column(db.String(20))
+    status_pendaftaran = db.Column(db.String(20), default='pending')
+    status_pembayaran = db.Column(db.String(20), default='belum')
     progress = db.Column(db.Integer, default=40)
-    gelombang = db.Column(db.String(10))
     foto = db.Column(db.String(100))
     ijazah = db.Column(db.String(100))

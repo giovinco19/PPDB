@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login - PPDB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Admin Login</h2>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form method="POST" class="form-modern">
+                <div class="form-group">
+                    <label>Username Admin:</label>
+                    <input type="text" name="username" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Password Admin:</label>
+                    <input type="password" name="password" required class="form-control">
+                </div>
+                <button type="submit" class="btn-submit">Login</button>
+            </form>
+            <div class="form-footer">
+                <a href="{{ url_for('home') }}">Kembali ke Halaman Utama</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

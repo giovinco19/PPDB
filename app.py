@@ -45,9 +45,15 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        # Check if email already exists
+        if User.query.filter_by(email=request.form['email']).first():
+            flash('Email sudah terdaftar!')
+            return redirect(url_for('register'))
+            
         hashed_pw = generate_password_hash(request.form['password'])
         user = User(
             username=request.form['username'],
+            email=request.form['email'],
             password=hashed_pw,
             nama_lengkap=request.form['nama_lengkap'],
             no_hp=request.form['no_hp'],
@@ -95,24 +101,24 @@ def form_pendaftaran():
         return redirect(url_for('dashboard'))
         
     if request.method == 'POST':
-        # Handle file uploads first
-        if 'foto' not in request.files or 'ijazah' not in request.files:
-            flash('File foto dan ijazah harus diupload')
-            return redirect(request.url)
-            
-        foto = request.files['foto']
-        ijazah = request.files['ijazah']
-        
-        if foto.filename == '' or ijazah.filename == '':
-            flash('File belum dipilih')
-            return redirect(request.url)
-
-        if not (allowed_file(foto.filename) and allowed_file(ijazah.filename)):
-            flash('Format file tidak diizinkan')
-            return redirect(request.url)
-
         try:
-            # Save files with secure filenames
+            # Handle file uploads
+            if 'foto' not in request.files or 'ijazah' not in request.files:
+                flash('File foto dan ijazah harus diupload')
+                return redirect(request.url)
+                
+            foto = request.files['foto']
+            ijazah = request.files['ijazah']
+            
+            if foto.filename == '' or ijazah.filename == '':
+                flash('File belum dipilih')
+                return redirect(request.url)
+
+            if not (allowed_file(foto.filename) and allowed_file(ijazah.filename)):
+                flash('Format file tidak diizinkan')
+                return redirect(request.url)
+
+            # Save files
             foto_filename = secure_filename(foto.filename)
             ijazah_filename = secure_filename(ijazah.filename)
             
@@ -122,14 +128,22 @@ def form_pendaftaran():
             # Create pendaftaran record
             pendaftaran = Pendaftaran(
                 user_id=current_user.id,
-                asal_sekolah=request.form['asal_sekolah'],
-                tahun_lulus=request.form['tahun_lulus'],
-                jurusan=request.form['jurusan'],
-                waktu_kuliah=request.form['waktu_kuliah'],
-                gelombang=request.form['gelombang'],
+                nama_lengkap=request.form.get('nama_lengkap'),
+                asal_sekolah=request.form.get('asal_sekolah'),
+                nama_ortu=request.form.get('nama_ortu'),
+                alamat=request.form.get('alamat'),
+                tempat_lahir=request.form.get('tempat_lahir'),
+                tanggal_lahir=request.form.get('tanggal_lahir'),
+                jenis_kelamin=request.form.get('jenis_kelamin'),
+                tahun_lulus=request.form.get('tahun_lulus'),
+                jurusan=request.form.get('jurusan'),
+                waktu_kuliah=request.form.get('waktu_kuliah'),
+                gelombang=request.form.get('gelombang'),
                 foto=foto_filename,
-                ijazah=ijazah_filename
+                ijazah=ijazah_filename,
+                status_pendaftaran='pending'
             )
+            
             db.session.add(pendaftaran)
             db.session.commit()
             
@@ -137,10 +151,11 @@ def form_pendaftaran():
             return redirect(url_for('dashboard'))
             
         except Exception as e:
-            flash('Terjadi kesalahan saat upload file')
+            print(f"Error: {str(e)}")  # For debugging
+            flash('Terjadi kesalahan saat mengirim formulir')
             return redirect(request.url)
             
-    return render_template('form_pendaftaran.html')
+    return render_template('form_pendaftaran.html', user=current_user)
 
 @app.route('/admin/dashboard')
 @login_required
@@ -186,21 +201,28 @@ def verifikasi_user():
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    if current_user.is_authenticated and current_user.is_admin():
-        return redirect(url_for('admin_dashboard'))
-        
+    if current_user.is_authenticated:
+        if current_user.role == 'admin':
+            return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('dashboard'))
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         
+        if not username or not password:
+            flash('Harap isi username dan password')
+            return redirect(url_for('admin_login'))
+
         user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password) and user.is_admin():
+        
+        if user and user.role == 'admin' and check_password_hash(user.password, password):
             login_user(user)
             flash('Login admin berhasil!')
             return redirect(url_for('admin_dashboard'))
         else:
             flash('Username atau password admin salah!')
-            
+    
     return render_template('admin_login.html')
 
 @app.route('/uploads/<path:filename>')
