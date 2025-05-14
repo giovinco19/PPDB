@@ -288,3 +288,60 @@ body {
     border-radius: 0.5rem !important;
     font-weight: 500 !important;
   }
+
+  /* Progress Bar Styles */
+  .progress-container {
+    margin: 20px 0;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress {
+    height: 100%;
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+
+  /* Progress colors based on percentage */
+  .progress[style*="width: 50%"] {
+    background: #ffc107; /* Yellow for 50% */
+  }
+
+  .progress[style*="width: 75%"] {
+    background: #28a745; /* Green for 75% */
+  }
+
+  .progress[style*="width: 100%"] {
+    background: #007bff; /* Blue for 100% */
+  }
+
+  .progress-text {
+    display: block;
+    text-align: center;
+    margin-top: 8px;
+    color: #4a5568;
+    font-weight: 500;
+  }
+
+  /* Mini Progress Bar for Admin Table */
+  .progress-mini {
+    width: 100px;
+    height: 15px;
+    background-color: #e9ecef;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  .progress-mini .progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #4361ee, #3451db);
+    color: white;
+    font-size: 11px;
+    line-height: 15px;
+    text-align: center;
+  }

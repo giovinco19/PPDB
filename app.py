@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from models import db, User, Pendaftaran
 from functools import wraps
 from flask_migrate import Migrate
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'rahasia'
@@ -90,7 +91,7 @@ def dashboard():
     return render_template('user_dashboard.html', pendaftaran=pendaftaran, current_user=current_user)
 
 # Create upload directories if they don't exist
-for dir in ['uploads/photos', 'uploads/ijazah']:
+for dir in ['uploads/photos', 'uploads/ijazah', 'uploads/payments']:
     os.makedirs(os.path.join(app.root_path, dir), exist_ok=True)
 
 @app.route('/pendaftaran', methods=['GET', 'POST'])
@@ -141,7 +142,8 @@ def form_pendaftaran():
                 gelombang=request.form.get('gelombang'),
                 foto=foto_filename,
                 ijazah=ijazah_filename,
-                status_pendaftaran='pending'
+                status_pendaftaran='pending',
+                progress=50  # Set initial progress to 50%
             )
             
             db.session.add(pendaftaran)
@@ -164,12 +166,31 @@ def admin_dashboard():
     data = Pendaftaran.query.all()
     return render_template('admin_dashboard.html', data=data)
 
+def update_progress(pendaftaran):
+    progress = 0
+    
+    # Initial form submission
+    if pendaftaran.status_pendaftaran:
+        progress += 50  # Set to 50% when form is submitted
+    
+    # After admin verification
+    if pendaftaran.status_pendaftaran == 'diterima':
+        progress += 25  # Add 25% after admin approves
+    
+    # After payment verification
+    if pendaftaran.status_pembayaran == 'diterima':
+        progress += 25  # Add final 25% after payment approval
+    
+    pendaftaran.progress = progress
+    db.session.commit()
+
 @app.route('/admin/approve/<int:id>')
 @login_required
 @admin_required
 def approve(id):
     pendaftaran = Pendaftaran.query.get_or_404(id)
     pendaftaran.status_pendaftaran = 'diterima'
+    update_progress(pendaftaran)  # This will add 25%
     db.session.commit()
     flash('Pendaftaran diterima.')
     return redirect(url_for('admin_dashboard'))
@@ -228,3 +249,55 @@ def admin_login():
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/upload_pembayaran/<int:id>', methods=['POST'])
+@login_required
+def upload_pembayaran(id):
+    pendaftaran = Pendaftaran.query.get_or_404(id)
+    
+    if 'bukti_pembayaran' not in request.files:
+        flash('File bukti pembayaran harus diupload')
+        return redirect(url_for('dashboard'))
+        
+    file = request.files['bukti_pembayaran']
+    if file.filename == '':
+        flash('File belum dipilih')
+        return redirect(url_for('dashboard'))
+
+    if not allowed_file(file.filename):
+        flash('Format file tidak diizinkan')
+        return redirect(url_for('dashboard'))
+
+    try:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.root_path, 'uploads/payments', filename))
+        
+        pendaftaran.bukti_pembayaran = filename
+        pendaftaran.status_pembayaran = 'pending'
+        pendaftaran.tanggal_pembayaran = datetime.now()
+        db.session.commit()
+        
+        flash('Bukti pembayaran berhasil dikirim dan sedang diverifikasi')
+        return redirect(url_for('dashboard'))
+    except:
+        flash('Terjadi kesalahan saat upload bukti pembayaran')
+        return redirect(url_for('dashboard'))
+
+@app.route('/admin/verify_payment/<int:id>/<status>')
+@login_required
+@admin_required
+def verify_payment(id, status):
+    pendaftaran = Pendaftaran.query.get_or_404(id)
+    old_status = pendaftaran.status_pembayaran
+    pendaftaran.status_pembayaran = status
+    
+    # Update progress based on new status
+    if status == 'diterima':
+        if old_status != 'diterima':  # Only add progress if it wasn't already approved
+            pendaftaran.progress += 25
+    elif old_status == 'diterima':  # If removing approval
+        pendaftaran.progress -= 25
+            
+    db.session.commit()
+    flash(f'Status pembayaran diubah menjadi {status}')
+    return redirect(url_for('detail_pendaftaran', id=id))

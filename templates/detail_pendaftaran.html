@@ -45,14 +45,40 @@
                         </p>
                     </div>
                     
-                    <div class="actions">
-                        <a href="{{ url_for('approve', id=pendaftaran.id) }}" class="btn btn-success">
-                            <i class="fas fa-check"></i> Terima
-                        </a>
-                        <a href="{{ url_for('reject', id=pendaftaran.id) }}" class="btn btn-danger">
-                            <i class="fas fa-times"></i> Tolak
-                        </a>
-                    </div>
+                    {% if pendaftaran.bukti_pembayaran %}
+                        <div class="payment-section">
+                            <h3>Informasi Pembayaran</h3>
+                            <p><strong>Status Pembayaran:</strong> {{ pendaftaran.status_pembayaran }}</p>
+                            <p><strong>Tanggal Upload:</strong> {{ pendaftaran.tanggal_pembayaran.strftime('%d-%m-%Y %H:%M') }}</p>
+                            <p><strong>Bukti Pembayaran:</strong>
+                                <a href="{{ url_for('uploaded_file', filename='payments/' + pendaftaran.bukti_pembayaran) }}" target="_blank">
+                                    Lihat Bukti
+                                </a>
+                            </p>
+                            
+                            {% if pendaftaran.status_pendaftaran == 'diterima' %}
+                                <div class="payment-actions">
+                                    <a href="{{ url_for('verify_payment', id=pendaftaran.id, status='diterima') }}" class="btn btn-success">
+                                        <i class="fas fa-check"></i> Terima Pembayaran
+                                    </a>
+                                    <a href="{{ url_for('verify_payment', id=pendaftaran.id, status='ditolak') }}" class="btn btn-danger">
+                                        <i class="fas fa-times"></i> Tolak Pembayaran
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    
+                    {% if pendaftaran.status_pendaftaran == 'pending' %}
+                        <div class="actions">
+                            <a href="{{ url_for('approve', id=pendaftaran.id) }}" class="btn btn-success">
+                                <i class="fas fa-check"></i> Terima Formulir
+                            </a>
+                            <a href="{{ url_for('reject', id=pendaftaran.id) }}" class="btn btn-danger">
+                                <i class="fas fa-times"></i> Tolak Formulir
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

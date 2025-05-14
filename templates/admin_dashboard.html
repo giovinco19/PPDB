@@ -19,6 +19,26 @@
         </div>
         
         <div class="main-content">
+            <div class="dashboard-card progress-overview">
+                <h2>Progress Pendaftaran</h2>
+                <div class="progress-grid">
+                    {% for row in data %}
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span class="nama">{{ row.user.nama_lengkap }}</span>
+                            <span class="status {{ row.status_pendaftaran }}">{{ row.status_pendaftaran }}</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ row.progress }}%"></div>
+                            </div>
+                            <span class="progress-text">{{ row.progress }}% Selesai</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             <div class="dashboard-card">
                 <h2>Data Pendaftaran</h2>
                 <table class="table">

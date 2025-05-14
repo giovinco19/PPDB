@@ -148,6 +148,96 @@ body {
     border-top: 1px solid #e9ecef;
 }
 
+/* Progress Overview Styles */
+.progress-overview {
+    margin-bottom: 30px;
+}
+
+.progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.progress-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.nama {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.diterima {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.ditolak {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.progress-container {
+    margin: 10px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 16px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* Progress colors based on percentage */
+.progress[style*="width: 50%"] {
+    background: #ffc107; /* Yellow for 50% */
+}
+
+.progress[style*="width: 75%"] {
+    background: #28a745; /* Green for 75% */
+}
+
+.progress[style*="width: 100%"] {
+    background: #007bff; /* Blue for 100% */
+}
+
+.progress-text {
+    display: block;
+    text-align: right;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #4a5568;
+}
+
 /* Responsiveness */
 @media (max-width: 768px) {
     .sidebar {

@@ -24,6 +24,12 @@
         {% if pendaftaran %}
             <div class="pendaftaran-info">
                 <h2>Status Pendaftaran:</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ pendaftaran.progress }}%"></div>
+                    </div>
+                    <span class="progress-text">{{ pendaftaran.progress }}% Selesai</span>
+                </div>
                 {% if pendaftaran.status_pendaftaran == 'diterima' %}
                     <div id="status-alert" data-status="diterima" class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
@@ -47,6 +53,38 @@
                     <li>Gelombang: {{ pendaftaran.gelombang }}</li>
                     <li>Status: {{ pendaftaran.status_pendaftaran }}</li>
                 </ul>
+
+                {% if pendaftaran.status_pendaftaran == 'diterima' %}
+                    {% if pendaftaran.status_pembayaran == 'belum' %}
+                        <div class="payment-info">
+                            <h3>Informasi Pembayaran</h3>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                <p>Silakan lakukan pembayaran ke rekening berikut:</p>
+                                <p>Bank XYZ: 1234-5678-9012</p>
+                                <p>A.n: Nama Sekolah</p>
+                                <p>Jumlah: Rp. 500.000</p>
+                            </div>
+                            <form method="POST" action="{{ url_for('upload_pembayaran', id=pendaftaran.id) }}" enctype="multipart/form-data" class="payment-form">
+                                <div class="form-group">
+                                    <label>Upload Bukti Pembayaran:</label>
+                                    <input type="file" name="bukti_pembayaran" required class="form-control" accept="image/*">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Kirim Bukti Pembayaran</button>
+                            </form>
+                        </div>
+                    {% elif pendaftaran.status_pembayaran == 'pending' %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-clock"></i>
+                            <span>Bukti pembayaran sedang diverifikasi admin</span>
+                        </div>
+                    {% elif pendaftaran.status_pembayaran == 'diterima' %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Pembayaran telah dikonfirmasi. Selamat!</span>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
         {% else %}
             <p>Anda belum mengisi formulir pendaftaran. Silakan isi terlebih dahulu.</p>

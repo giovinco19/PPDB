@@ -33,6 +33,9 @@ class Pendaftaran(db.Model):
     gelombang = db.Column(db.String(20))
     status_pendaftaran = db.Column(db.String(20), default='pending')
     status_pembayaran = db.Column(db.String(20), default='belum')
-    progress = db.Column(db.Integer, default=40)
+    progress = db.Column(db.Integer, default=50)  # Start at 50% when form submitted
     foto = db.Column(db.String(100))
     ijazah = db.Column(db.String(100))
+    bukti_pembayaran = db.Column(db.String(100))
+    status_pembayaran = db.Column(db.String(20), default='belum')  # belum/pending/diterima/ditolak
+    tanggal_pembayaran = db.Column(db.DateTime)
