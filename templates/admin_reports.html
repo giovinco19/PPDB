@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laporan PPDB - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <div class="logo">Admin PPDB</div>
+            <div class="sidebar-menu">
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
+                <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="report-header">
+                <h1>Dashboard Laporan</h1>
+                <p class="report-subtitle">Ringkasan dan analisis data pendaftaran</p>
+            </div>
+
+            <div class="stats-overview">
+                <div class="stat-card total">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Pendaftar</h3>
+                        <p>{{ stats.total_pendaftar }}</p>
+                        <span class="stat-trend">
+                            <i class="fas fa-chart-line"></i>
+                            Total Keseluruhan
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Diterima</h3>
+                        <p>{{ stats.diterima }}</p>
+                        <span class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            {{ stats.persentase_kelulusan }}% Tingkat Kelulusan
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pending</h3>
+                        <p>{{ stats.pending }}</p>
+                        <span class="stat-trend">
+                            <i class="fas fa-spinner"></i>
+                            Menunggu Verifikasi
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Ditolak</h3>
+                        <p>{{ stats.ditolak }}</p>
+                        <span class="stat-trend negative">
+                            <i class="fas fa-arrow-down"></i>
+                            Tidak Memenuhi Syarat
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-grid">
+                <div class="report-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Distribusi Jurusan</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="jurusanChart"></canvas>
+                    </div>
+                </div>
+                <div class="report-card">
+                    <div class="card-header">
+                        <i class="fas fa-tasks"></i>
+                        <h3>Status Pendaftaran</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+                <div class="report-card">
+                    <div class="card-header">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h3>Status Pembayaran</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="paymentChart"></canvas>
+                    </div>
+                </div>
+                <div class="report-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Trend Pendaftaran</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-summary">
+                <div class="summary-header">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>Ringkasan Laporan</h2>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-section">
+                        <div class="summary-icon success">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>Persentase Kelulusan</h4>
+                        <p>{{ stats.persentase_kelulusan }}%</p>
+                    </div>
+                    <div class="summary-section">
+                        <div class="summary-icon primary">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <h4>Total Pembayaran</h4>
+                        <p>Rp. {{ '{:,.0f}'.format(stats.total_pembayaran) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Jurusan Chart
+        new Chart(document.getElementById('jurusanChart'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ stats.jurusan_labels|tojson }},
+                datasets: [{
+                    data: {{ stats.jurusan_data }},
+                    backgroundColor: ['#4361ee', '#3498db', '#2ecc71', '#f1c40f']
+                }]
+            }
+        });
+
+        // Status Chart
+        new Chart(document.getElementById('statusChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Diterima', 'Pending', 'Ditolak'],
+                datasets: [{
+                    label: 'Jumlah Pendaftar',
+                    data: [{{ stats.diterima }}, {{ stats.pending }}, {{ stats.ditolak }}],
+                    backgroundColor: ['#2ecc71', '#f1c40f', '#e74c3c']
+                }]
+            }
+        });
+
+        // Payment Chart
+        new Chart(document.getElementById('paymentChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Lunas', 'Pending', 'Belum Bayar'],
+                datasets: [{
+                    data: [
+                        {{ stats.pembayaran_lunas }},
+                        {{ stats.pembayaran_pending }},
+                        {{ stats.pembayaran_belum }}
+                    ],
+                    backgroundColor: ['#2ecc71', '#f1c40f', '#e74c3c']
+                }]
+            }
+        });
+
+        // Trend Chart
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: {{ stats.trend_labels|tojson }},
+                datasets: [{
+                    label: 'Pendaftar per Hari',
+                    data: {{ stats.trend_data }},
+                    borderColor: '#4361ee',
+                    tension: 0.4
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

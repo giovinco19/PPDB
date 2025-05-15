@@ -39,3 +39,5 @@ class Pendaftaran(db.Model):
     bukti_pembayaran = db.Column(db.String(100))
     status_pembayaran = db.Column(db.String(20), default='belum')  # belum/pending/diterima/ditolak
     tanggal_pembayaran = db.Column(db.DateTime)
+    notification_shown = db.Column(db.Boolean, default=False)
+    payment_notification_shown = db.Column(db.Boolean, default=False)

@@ -1,123 +1,314 @@
-<!-- templates/user_dashboard.html -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Pengguna</title>
+    <title>Dashboard Siswa - SMK KARYA BANGSA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Selamat Datang di Dashboard Anda</h1>
-        
-        <div class="user-info">
-            <h2>Data Pengguna:</h2>
-            <ul>
-                <li>Nama Lengkap: {{ current_user.nama_lengkap }}</li>
-                <li>Alamat: {{ current_user.alamat }}</li>
-                <li>No HP: {{ current_user.no_hp }}</li>
-            </ul>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="welcome-section">
+                <h1>Selamat Datang, {{ current_user.nama_lengkap }}!</h1>
+                <p class="subtitle">Pantau status pendaftaran dan pembayaran Anda di sini</p>
+            </div>
+            <div class="user-actions">
+                <a href="{{ url_for('logout') }}" class="btn btn-outline">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
         </div>
 
-        {% if pendaftaran %}
-            <div class="pendaftaran-info">
-                <h2>Status Pendaftaran:</h2>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress" style="width: {{ pendaftaran.progress }}%"></div>
-                    </div>
-                    <span class="progress-text">{{ pendaftaran.progress }}% Selesai</span>
+        <div class="dashboard-grid">
+            <!-- Profile Card -->
+            <div class="dashboard-card profile-card">
+                <div class="card-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h2>Profil Saya</h2>
                 </div>
-                {% if pendaftaran.status_pendaftaran == 'diterima' %}
-                    <div id="status-alert" data-status="diterima" class="alert alert-success">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Selamat! Pendaftaran Anda telah diterima</span>
+                <div class="card-content">
+                    <div class="profile-info">
+                        <div class="info-item">
+                            <span class="label"><i class="fas fa-user"></i> Nama</span>
+                            <span class="value">{{ current_user.nama_lengkap }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label"><i class="fas fa-map-marker-alt"></i> Alamat</span>
+                            <span class="value">{{ current_user.alamat }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label"><i class="fas fa-phone"></i> No HP</span>
+                            <span class="value">{{ current_user.no_hp }}</span>
+                        </div>
                     </div>
-                {% elif pendaftaran.status_pendaftaran == 'ditolak' %}
-                    <div id="status-alert" data-status="ditolak" class="alert alert-danger">
-                        <i class="fas fa-times-circle"></i>
-                        <span>Maaf, pendaftaran Anda ditolak</span>
+                </div>
+            </div>
+
+            {% if pendaftaran %}
+                <!-- Status Card -->
+                <div class="dashboard-card status-card">
+                    <div class="card-header">
+                        <i class="fas fa-tasks"></i>
+                        <h2>Status Pendaftaran</h2>
                     </div>
-                {% else %}
-                    <div class="alert alert-warning">
-                        <i class="fas fa-clock"></i>
-                        <span>Pendaftaran Anda sedang dalam proses review</span>
+                    <div class="card-content">
+                        <div class="progress-container">
+                            <div class="progress-info">
+                                <span class="progress-label">Progress Pendaftaran</span>
+                                <span class="progress-percentage">{{ pendaftaran.progress }}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ pendaftaran.progress }}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="status-badges">
+                            <div class="status-badge {{ pendaftaran.status_pendaftaran }}">
+                                <i class="fas fa-file-alt"></i>
+                                <span>{{ pendaftaran.status_pendaftaran|title }}</span>
+                            </div>
+                            {% if pendaftaran.status_pembayaran != 'belum' %}
+                            <div class="status-badge {{ pendaftaran.status_pembayaran }}">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Pembayaran {{ pendaftaran.status_pembayaran|title }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="application-details">
+                            <h3>Detail Pendaftaran</h3>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="label">Asal Sekolah</span>
+                                    <span class="value">{{ pendaftaran.asal_sekolah }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Jurusan</span>
+                                    <span class="value">{{ pendaftaran.jurusan }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Waktu Kuliah</span>
+                                    <span class="value">{{ pendaftaran.waktu_kuliah }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Gelombang</span>
+                                    <span class="value">{{ pendaftaran.gelombang }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
-                <ul>
-                    <li>Asal Sekolah: {{ pendaftaran.asal_sekolah }}</li>
-                    <li>Jurusan: {{ pendaftaran.jurusan }}</li>
-                    <li>Waktu Kuliah: {{ pendaftaran.waktu_kuliah }}</li>
-                    <li>Gelombang: {{ pendaftaran.gelombang }}</li>
-                    <li>Status: {{ pendaftaran.status_pendaftaran }}</li>
-                </ul>
+                </div>
 
                 {% if pendaftaran.status_pendaftaran == 'diterima' %}
-                    {% if pendaftaran.status_pembayaran == 'belum' %}
-                        <div class="payment-info">
-                            <h3>Informasi Pembayaran</h3>
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle"></i>
-                                <p>Silakan lakukan pembayaran ke rekening berikut:</p>
-                                <p>Bank XYZ: 1234-5678-9012</p>
-                                <p>A.n: Nama Sekolah</p>
-                                <p>Jumlah: Rp. 500.000</p>
-                            </div>
-                            <form method="POST" action="{{ url_for('upload_pembayaran', id=pendaftaran.id) }}" enctype="multipart/form-data" class="payment-form">
-                                <div class="form-group">
-                                    <label>Upload Bukti Pembayaran:</label>
-                                    <input type="file" name="bukti_pembayaran" required class="form-control" accept="image/*">
+                    <!-- Payment Card -->
+                    <div class="dashboard-card payment-card">
+                        <div class="card-header">
+                            <i class="fas fa-credit-card"></i>
+                            <h2>Informasi Pembayaran</h2>
+                        </div>
+                        <div class="card-content">
+                            {% if pendaftaran.status_pembayaran == 'belum' %}
+                                <div class="payment-info">
+                                    <div class="payment-steps">
+                                        <div class="payment-step">
+                                            <div class="step-icon">
+                                                <i class="fas fa-university"></i>
+                                            </div>
+                                            <h4>Transfer Pembayaran</h4>
+                                            <div class="bank-card-container">
+                                                <div class="atm-card">
+                                                    <div class="card-front">
+                                                        <div class="card-header-content">
+                                                            <div class="bank-logo">
+                                                                <i class="fas fa-university"></i>
+                                                                <span>Bank BCA</span>
+                                                            </div>
+                                                            <div class="card-chip">
+                                                                <div class="chip-line"></div>
+                                                                <div class="chip-line"></div>
+                                                                <div class="chip-line"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="card-number-container">
+                                                                <span class="card-number-group">1234</span>
+                                                                <span class="card-number-group">5678</span>
+                                                                <span class="card-number-group">9012</span>
+                                                                <span class="card-number-group">3456</span>
+                                                            </div>
+                                                            <div class="card-info">
+                                                                <div class="card-holder">
+                                                                    <div class="label">Nama Pemilik</div>
+                                                                    <div class="value">KARYA BANGSA</div>
+                                                                </div>
+                                                                <div class="bank-info">
+                                                                    <div class="label">Cabang</div>
+                                                                    <div class="value">JAKARTA PUSAT</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="payment-amount-container">
+                                                    <div class="amount-box">
+                                                        <div class="amount-label">Total Pembayaran</div>
+                                                        <div class="amount-value">Rp. 6.000.000</div>
+                                                        <div class="amount-note">Mohon transfer sesuai nominal</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="payment-step">
+                                            <div class="step-icon">
+                                                <i class="fas fa-file-upload"></i>
+                                            </div>
+                                            <h4>Upload Bukti Transfer</h4>
+                                            <div class="upload-container">
+                                                <form method="POST" action="{{ url_for('upload_pembayaran', id=pendaftaran.id) }}" 
+                                                      enctype="multipart/form-data" class="payment-form">
+                                                    <div class="upload-area" id="uploadArea">
+                                                        <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" 
+                                                               required class="file-input" accept="image/*" onchange="showPreview(this)">
+                                                        <label for="bukti_pembayaran" class="upload-label">
+                                                            <i class="fas fa-cloud-upload-alt"></i>
+                                                            <span class="upload-text">Pilih file atau drop di sini</span>
+                                                            <div class="selected-file-info" style="display: none;">
+                                                                <div class="preview-container">
+                                                                    <img id="preview" src="#" alt="Preview">
+                                                                </div>
+                                                                <div class="file-details">
+                                                                    <span class="file-name"></span>
+                                                                    <span class="file-size"></span>
+                                                                </div>
+                                                            </div>
+                                                            <small>Format: JPG, PNG (Max 2MB)</small>
+                                                        </label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary btn-upload">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                        Kirim Bukti Pembayaran
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Kirim Bukti Pembayaran</button>
-                            </form>
+                            {% else %}
+                                <div class="payment-status-container {{ pendaftaran.status_pembayaran }}">
+                                    <i class="fas fa-{{ 'check-circle' if pendaftaran.status_pembayaran == 'diterima' else 'clock' }}"></i>
+                                    <div class="status-message">
+                                        <h4>{{ 'Pembayaran Diterima' if pendaftaran.status_pembayaran == 'diterima' else 'Menunggu Verifikasi' }}</h4>
+                                        <p>{{ 'Terima kasih! Pembayaran Anda telah dikonfirmasi.' if pendaftaran.status_pembayaran == 'diterima' 
+                                              else 'Bukti pembayaran Anda sedang diverifikasi oleh admin.' }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% elif pendaftaran.status_pembayaran == 'pending' %}
-                        <div class="alert alert-warning">
-                            <i class="fas fa-clock"></i>
-                            <span>Bukti pembayaran sedang diverifikasi admin</span>
-                        </div>
-                    {% elif pendaftaran.status_pembayaran == 'diterima' %}
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Pembayaran telah dikonfirmasi. Selamat!</span>
-                        </div>
-                    {% endif %}
+                    </div>
                 {% endif %}
-            </div>
-        {% else %}
-            <p>Anda belum mengisi formulir pendaftaran. Silakan isi terlebih dahulu.</p>
-            <a href="{{ url_for('form_pendaftaran') }}" class="btn">Isi Formulir Pendaftaran</a>
-        {% endif %}
-        
-        <div class="logout">
-            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+            {% else %}
+                <!-- Empty State Card -->
+                <div class="dashboard-card empty-state">
+                    <div class="card-content">
+                        <i class="fas fa-file-alt"></i>
+                        <h2>Belum Ada Pendaftaran</h2>
+                        <p>Anda belum mengisi formulir pendaftaran. Silakan isi terlebih dahulu.</p>
+                        <a href="{{ url_for('form_pendaftaran') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Isi Formulir Pendaftaran
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const statusAlert = document.getElementById('status-alert');
-            if (statusAlert) {
-                const status = statusAlert.dataset.status;
-                if (status === 'diterima') {
+            {% if pendaftaran %}
+                // Form verification notification
+                {% if pendaftaran.status_pendaftaran == 'diterima' and not pendaftaran.notification_shown %}
                     Swal.fire({
                         icon: 'success',
-                        title: 'Selamat!',
-                        text: 'Pendaftaran Anda telah diterima.',
-                        confirmButtonColor: '#4361ee'
+                        title: 'Formulir Diterima!',
+                        text: 'Selamat! Formulir pendaftaran Anda telah diverifikasi dan diterima oleh admin.',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+                        fetch('{{ url_for("mark_notification_shown", id=pendaftaran.id) }}');
                     });
-                } else if (status === 'ditolak') {
+                {% elif pendaftaran.status_pendaftaran == 'ditolak' and not pendaftaran.notification_shown %}
                     Swal.fire({
                         icon: 'error',
-                        title: 'Mohon Maaf',
-                        text: 'Pendaftaran Anda ditolak.',
-                        confirmButtonColor: '#4361ee'
+                        title: 'Formulir Ditolak',
+                        text: 'Mohon maaf, formulir pendaftaran Anda ditolak oleh admin.',
+                        confirmButtonColor: '#dc3545'
+                    }).then(() => {
+                        fetch('{{ url_for("mark_notification_shown", id=pendaftaran.id) }}');
                     });
-                }
-            }
+                {% endif %}
+
+                // Payment verification notification
+                {% if pendaftaran.status_pembayaran == 'diterima' and not pendaftaran.payment_notification_shown %}
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pembayaran Diterima!',
+                        text: 'Selamat! Pembayaran Anda telah diverifikasi oleh admin.',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+                        fetch('{{ url_for("mark_payment_notification_shown", id=pendaftaran.id) }}');
+                    });
+                {% elif pendaftaran.status_pembayaran == 'ditolak' and not pendaftaran.payment_notification_shown %}
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Pembayaran Ditolak',
+                        text: 'Mohon maaf, pembayaran Anda ditolak. Silakan upload ulang bukti pembayaran yang valid.',
+                        confirmButtonColor: '#dc3545'
+                    }).then(() => {
+                        fetch('{{ url_for("mark_payment_notification_shown", id=pendaftaran.id) }}');
+                    });
+                {% endif %}
+            {% endif %}
         });
+
+        function showPreview(input) {
+            const uploadLabel = input.nextElementSibling;
+            const uploadText = uploadLabel.querySelector('.upload-text');
+            const fileInfo = uploadLabel.querySelector('.selected-file-info');
+            const preview = fileInfo.querySelector('#preview');
+            const fileName = fileInfo.querySelector('.file-name');
+            const fileSize = fileInfo.querySelector('.file-size');
+            
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    
+                    uploadText.style.display = 'none';
+                    fileInfo.style.display = 'block';
+                    uploadLabel.classList.add('has-file');
+                }
+                
+                reader.readAsDataURL(file);
+            } else {
+                uploadText.style.display = 'block';
+                fileInfo.style.display = 'none';
+                uploadLabel.classList.remove('has-file');
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
     </script>
 </body>
 </html>

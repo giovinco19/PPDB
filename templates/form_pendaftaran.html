@@ -1,73 +1,163 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Formulir Pendaftaran</title>
+  <title>Formulir Pendaftaran - SMK KARYA BANGSA</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h2>Formulir Pendaftaran</h2>
-    <form method="POST" enctype="multipart/form-data">
-      <label>Nama Lengkap:</label>
-      <input type="text" name="nama_lengkap" required>
+  <div class="container registration-container">
+    <div class="form-header">
+      <h1>Formulir Pendaftaran</h1>
+      <p class="form-subtitle">Silakan lengkapi data diri Anda dengan benar</p>
+    </div>
 
-      <label>Asal Sekolah:</label>
-      <input type="text" name="asal_sekolah" required>
+    <form method="POST" enctype="multipart/form-data" class="modern-form">
+      <!-- Data Pribadi -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-user"></i>
+          <h3>Data Pribadi</h3>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label><i class="fas fa-user-circle"></i> Nama Lengkap <span class="required">*</span></label>
+            <input type="text" name="nama_lengkap" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-map-marker-alt"></i> Tempat Lahir <span class="required">*</span></label>
+            <input type="text" name="tempat_lahir" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-calendar"></i> Tanggal Lahir <span class="required">*</span></label>
+            <input type="date" name="tanggal_lahir" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-venus-mars"></i> Jenis Kelamin <span class="required">*</span></label>
+            <select name="jenis_kelamin" class="form-control" required>
+              <option value="">-- Pilih Jenis Kelamin --</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-      <label>Nama Orang Tua:</label>
-      <input type="text" name="nama_ortu" required>
+      <!-- Data Orang Tua -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-users"></i>
+          <h3>Data Orang Tua</h3>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label><i class="fas fa-user-tie"></i> Nama Orang Tua <span class="required">*</span></label>
+            <input type="text" name="nama_ortu" class="form-control" required>
+          </div>
+          <div class="form-group wide">
+            <label><i class="fas fa-home"></i> Alamat <span class="required">*</span></label>
+            <textarea name="alamat" class="form-control" required></textarea>
+          </div>
+        </div>
+      </div>
 
-      <label>Alamat:</label>
-      <input type="text" name="alamat" required>
+      <!-- Data Pendidikan -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Data Pendidikan</h3>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label><i class="fas fa-school"></i> Asal Sekolah <span class="required">*</span></label>
+            <input type="text" name="asal_sekolah" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-calendar-check"></i> Tahun Lulus <span class="required">*</span></label>
+            <input type="text" name="tahun_lulus" class="form-control" required pattern="[0-9]{4}" placeholder="Contoh: 2023">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-book"></i> Jurusan <span class="required">*</span></label>
+            <select name="jurusan" class="form-control" required>
+              <option value="">-- Pilih Jurusan --</option>
+              <option value="IPA">IPA</option>
+              <option value="IPS">IPS</option>
+              <option value="Bahasa">Bahasa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-clock"></i> Waktu Kuliah <span class="required">*</span></label>
+            <select name="waktu_kuliah" class="form-control" required>
+              <option value="">-- Pilih Waktu --</option>
+              <option value="Pagi">Pagi</option>
+              <option value="Siang">Siang</option>
+              <option value="Malam">Malam</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-layer-group"></i> Gelombang <span class="required">*</span></label>
+            <select name="gelombang" class="form-control" required>
+              <option value="">-- Pilih Gelombang --</option>
+              <option value="Gelombang 1">Gelombang 1</option>
+              <option value="Gelombang 2">Gelombang 2</option>
+              <option value="Gelombang 3">Gelombang 3</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-      <label for="tempat_lahir">Tempat Lahir:</label>
-      <input type="text" name="tempat_lahir" id="tempat_lahir" required>
+      <!-- Upload Dokumen -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-file-upload"></i>
+          <h3>Upload Dokumen</h3>
+        </div>
+        <div class="upload-grid">
+          <div class="form-group upload-group">
+            <label>Pas Foto <span class="required">*</span></label>
+            <div class="file-upload">
+              <input type="file" name="foto" id="foto" accept="image/*" required>
+              <label for="foto" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Pilih Foto</span>
+                <small>Format: JPG, PNG (Max. 2MB)</small>
+              </label>
+            </div>
+          </div>
+          <div class="form-group upload-group">
+            <label>Ijazah <span class="required">*</span></label>
+            <div class="file-upload">
+              <input type="file" name="ijazah" id="ijazah" accept=".pdf,image/*" required>
+              <label for="ijazah" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Upload Ijazah</span>
+                <small>Format: PDF, JPG, PNG (Max. 2MB)</small>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <label for="tanggal_lahir">Tanggal Lahir:</label>
-      <input type="date" name="tanggal_lahir" id="tanggal_lahir" required>
-
-      <label for="jenis_kelamin">Jenis Kelamin:</label>
-      <select name="jenis_kelamin" id="jenis_kelamin" required>
-        <option value="">-- Pilih Jenis Kelamin --</option>
-        <option value="Laki-laki">Laki-laki</option>
-        <option value="Perempuan">Perempuan</option>
-      </select>
-
-      <label for="tahun_lulus">Tahun Lulus:</label>
-      <input type="text" name="tahun_lulus" id="tahun_lulus" required>
-
-      <label for="jurusan">Jurusan:</label>
-      <select name="jurusan" id="jurusan" required>
-        <option value="">-- Pilih Jurusan --</option>
-        <option value="IPA">IPA</option>
-        <option value="IPS">IPS</option>
-        <option value="Bahasa">Bahasa</option>
-      </select>
-     
-      <label for="waktu_kuliah">Waktu Kuliah:</label>
-      <select name="waktu_kuliah" id="waktu_kuliah" required>
-        <option value="">-- Pilih Waktu --</option>
-        <option value="Pagi">Pagi</option>
-        <option value="Siang">Siang</option>
-        <option value="Malam">Malam</option>
-      </select>
-
-      <label for="gelombang">Gelombang:</label>
-      <select name="gelombang" id="gelombang" required>
-         <option value="">-- Pilih Gelombang --</option>
-         <option value="Gelombang 1">Gelombang 1</option>
-         <option value="Gelombang 2">Gelombang 2</option>
-         <option value="Gelombang 3">Gelombang 3</option>
-      </select>
-
-      <label for="foto">Pas Foto:</label>
-      <input type="file" name="foto" id="foto" accept="image/*" required>
-
-      <label for="ijazah">Ijazah:</label>
-      <input type="file" name="ijazah" id="ijazah" accept=".pdf,image/*" required>
-
-      <button type="submit">Kirim</button>
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-paper-plane"></i> Kirim Pendaftaran
+        </button>
+      </div>
     </form>
   </div>
+
+  <script>
+    // Add file name display when file is selected
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        const label = this.nextElementSibling.querySelector('span');
+        if (fileName) {
+          label.textContent = fileName;
+        }
+      });
+    });
+  </script>
 </body>
 </html>

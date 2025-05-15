@@ -13,7 +13,7 @@
             </div>
             <div class="sidebar-menu">
                 <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="{{ url_for('verifikasi_user') }}"><i class="fas fa-user-check"></i> Verifikasi User</a>
+                 <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
                 <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
@@ -21,6 +21,21 @@
         <div class="main-content">
             <div class="dashboard-card">
                 <h2>Detail Pendaftaran</h2>
+                <div class="progress-overview">
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span class="nama">{{ pendaftaran.user.nama_lengkap }}</span>
+                            <span class="status {{ pendaftaran.status_pendaftaran }}">{{ pendaftaran.status_pendaftaran }}</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ pendaftaran.progress }}%"></div>
+                            </div>
+                            <span class="progress-text">{{ pendaftaran.progress }}% Selesai</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="detail-info">
                     <p><strong>Nama:</strong> {{ pendaftaran.user.nama_lengkap }}</p>
                     <p><strong>Tempat Lahir:</strong> {{ pendaftaran.tempat_lahir }}</p>
@@ -56,13 +71,10 @@
                                 </a>
                             </p>
                             
-                            {% if pendaftaran.status_pendaftaran == 'diterima' %}
+                            {% if pendaftaran.status_pendaftaran == 'diterima' and pendaftaran.status_pembayaran == 'pending' %}
                                 <div class="payment-actions">
-                                    <a href="{{ url_for('verify_payment', id=pendaftaran.id, status='diterima') }}" class="btn btn-success">
-                                        <i class="fas fa-check"></i> Terima Pembayaran
-                                    </a>
-                                    <a href="{{ url_for('verify_payment', id=pendaftaran.id, status='ditolak') }}" class="btn btn-danger">
-                                        <i class="fas fa-times"></i> Tolak Pembayaran
+                                    <a href="{{ url_for('verify_payment', id=pendaftaran.id) }}" class="btn btn-success">
+                                        <i class="fas fa-check"></i> Verifikasi Pembayaran
                                     </a>
                                 </div>
                             {% endif %}

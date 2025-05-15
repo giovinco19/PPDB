@@ -189,11 +189,32 @@ def update_progress(pendaftaran):
 @admin_required
 def approve(id):
     pendaftaran = Pendaftaran.query.get_or_404(id)
+    old_status = pendaftaran.status_pendaftaran
     pendaftaran.status_pendaftaran = 'diterima'
-    update_progress(pendaftaran)  # This will add 25%
+    # Reset notification flag when status changes
+    pendaftaran.notification_shown = False
+    update_progress(pendaftaran)
     db.session.commit()
     flash('Pendaftaran diterima.')
     return redirect(url_for('admin_dashboard'))
+
+@app.route('/mark_notification_shown/<int:id>')
+@login_required
+def mark_notification_shown(id):
+    pendaftaran = Pendaftaran.query.get_or_404(id)
+    if pendaftaran.user_id == current_user.id:
+        pendaftaran.notification_shown = True
+        db.session.commit()
+    return {'status': 'success'}
+
+@app.route('/mark_payment_notification_shown/<int:id>')
+@login_required
+def mark_payment_notification_shown(id):
+    pendaftaran = Pendaftaran.query.get_or_404(id)
+    if pendaftaran.user_id == current_user.id:
+        pendaftaran.payment_notification_shown = True
+        db.session.commit()
+    return {'status': 'success'}
 
 @app.route('/admin/reject/<int:id>')
 @login_required
@@ -283,21 +304,59 @@ def upload_pembayaran(id):
         flash('Terjadi kesalahan saat upload bukti pembayaran')
         return redirect(url_for('dashboard'))
 
-@app.route('/admin/verify_payment/<int:id>/<status>')
+@app.route('/admin/verify_payment/<int:id>')
 @login_required
 @admin_required
-def verify_payment(id, status):
+def verify_payment(id):
     pendaftaran = Pendaftaran.query.get_or_404(id)
-    old_status = pendaftaran.status_pembayaran
-    pendaftaran.status_pembayaran = status
-    
-    # Update progress based on new status
-    if status == 'diterima':
-        if old_status != 'diterima':  # Only add progress if it wasn't already approved
-            pendaftaran.progress += 25
-    elif old_status == 'diterima':  # If removing approval
-        pendaftaran.progress -= 25
-            
-    db.session.commit()
-    flash(f'Status pembayaran diubah menjadi {status}')
+    if pendaftaran.status_pembayaran == 'pending':
+        pendaftaran.status_pembayaran = 'diterima'
+        pendaftaran.payment_notification_shown = False  # Reset notification flag
+        pendaftaran.progress = 100
+        db.session.commit()
+        flash('Pembayaran telah diverifikasi')
     return redirect(url_for('detail_pendaftaran', id=id))
+
+@app.route('/admin/reports')
+@login_required
+@admin_required
+def admin_reports():
+    # Get statistics
+    all_pendaftar = Pendaftaran.query.all()
+    stats = {
+        'total_pendaftar': len(all_pendaftar),
+        'diterima': len([p for p in all_pendaftar if p.status_pendaftaran == 'diterima']),
+        'pending': len([p for p in all_pendaftar if p.status_pendaftaran == 'pending']),
+        'ditolak': len([p for p in all_pendaftar if p.status_pendaftaran == 'ditolak']),
+        
+        # Jurusan statistics
+        'jurusan_labels': [],
+        'jurusan_data': [],
+        
+        # Payment statistics
+        'pembayaran_lunas': len([p for p in all_pendaftar if p.status_pembayaran == 'diterima']),
+        'pembayaran_pending': len([p for p in all_pendaftar if p.status_pembayaran == 'pending']),
+        'pembayaran_belum': len([p for p in all_pendaftar if p.status_pembayaran == 'belum']),
+        
+        # Calculate total payments (assuming 6jt per student)
+        'total_pembayaran': len([p for p in all_pendaftar if p.status_pembayaran == 'diterima']) * 6000000,
+        
+        # Calculate acceptance rate
+        'persentase_kelulusan': round(len([p for p in all_pendaftar if p.status_pendaftaran == 'diterima']) / len(all_pendaftar) * 100 if all_pendaftar else 0, 1)
+    }
+    
+    # Get jurusan distribution
+    jurusan_count = {}
+    for p in all_pendaftar:
+        jurusan_count[p.jurusan] = jurusan_count.get(p.jurusan, 0) + 1
+    
+    stats['jurusan_labels'] = list(jurusan_count.keys())
+    stats['jurusan_data'] = list(jurusan_count.values())
+    
+    # Get registration trends (last 7 days)
+    from datetime import datetime, timedelta
+    trend_labels = [(datetime.now() - timedelta(days=i)).strftime('%d/%m') for i in range(6, -1, -1)]
+    stats['trend_labels'] = trend_labels
+    stats['trend_data'] = [0] * 7  # Placeholder for actual data
+
+    return render_template('admin_reports.html', stats=stats)

@@ -1,43 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PPDB - Home</title>
+  <title>PPDB - SMK KARYA BANGSA</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container home-container">
-    <div class="card welcome-card">
-      <h1>Selamat Datang di PPDB</h1>
-      <div class="steps-container">
-        <h3>Langkah-langkah pendaftaran:</h3>
-        <div class="steps">
-          <div class="step">
-            <i class="fas fa-user-plus"></i>
-            <p>Register akun Anda</p>
-          </div>
-          <div class="step">
-            <i class="fas fa-sign-in-alt"></i>
-            <p>Login ke sistem</p>
-          </div>
-          <div class="step">
-            <i class="fas fa-file-alt"></i>
-            <p>Isi formulir pendaftaran</p>
-          </div>
-          <div class="step">
-            <i class="fas fa-upload"></i>
-            <p>Upload pas foto dan ijazah</p>
-          </div>
-          <div class="step">
-            <i class="fas fa-clock"></i>
-            <p>Tunggu konfirmasi dari admin</p>
-          </div>
+    <div class="hero-section">
+      <h1>Selamat Datang di PPDB SMK KARYA BANGSA</h1>
+      <p class="tagline">"Membangun Masa Depan Cemerlang Melalui Pendidikan Berkualitas"</p>
+      
+      <div class="motivation-card">
+        <div class="quote">
+          <i class="fas fa-quote-left"></i>
+          <p>"Pendidikan adalah tiket ke masa depan. Hari esok dimiliki oleh orang-orang yang mempersiapkan dirinya sejak hari ini."</p>
+          <span class="author">- Malcolm X</span>
         </div>
       </div>
-      <div class="action-buttons">
-        <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
-        <a href="{{ url_for('login') }}" class="btn btn-outline">Login</a>
+    </div>
+
+    <div class="features-section">
+      <h2>Mengapa Memilih SMK KARYA BANGSA?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Pendidikan Berkualitas</h3>
+          <p>Kurikulum terstandar dan pengajar profesional</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-building"></i>
+          <h3>Fasilitas Modern</h3>
+          <p>Laboratorium dan workshop berstandar industri</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-handshake"></i>
+          <h3>Kerjasama Industri</h3>
+          <p>Partner dengan perusahaan ternama</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-container glass-card">
+      <h2>Langkah Pendaftaran</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <i class="fas fa-user-plus"></i>
+          <h4>Register</h4>
+          <p>Daftarkan akun Anda</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <i class="fas fa-file-alt"></i>
+          <h4>Isi Formulir</h4>
+          <p>Lengkapi data diri</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <i class="fas fa-upload"></i>
+          <h4>Upload Dokumen</h4>
+          <p>Unggah berkas yang diperlukan</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <i class="fas fa-check-circle"></i>
+          <h4>Verifikasi</h4>
+          <p>Tunggu konfirmasi admin</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <div class="cta-content">
+        <h2>Siap Memulai Perjalanan Pendidikanmu?</h2>
+        <p>Jangan lewatkan kesempatan untuk menjadi bagian dari SMK KARYA BANGSA</p>
+        <div class="action-buttons">
+          <a href="{{ url_for('register') }}" class="btn btn-primary">Daftar Sekarang</a>
+          <a href="{{ url_for('login') }}" class="btn btn-outline">Sudah Punya Akun? Login</a>
+        </div>
       </div>
     </div>
   </div>

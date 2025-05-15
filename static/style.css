@@ -134,6 +134,192 @@ body {
     font-weight: 500;
   }
 
+  .registration-container {
+    max-width: 800px !important;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 2rem;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .form-header h1 {
+    color: #1a237e;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-subtitle {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  .modern-form .form-section {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .section-header i {
+    font-size: 1.5rem;
+    color: #4361ee;
+  }
+
+  .section-header h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.25rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group.wide {
+    grid-column: 1 / -1;
+  }
+
+  .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  .form-group label i {
+    color: #4361ee;
+    font-size: 1rem;
+  }
+
+  .required {
+    color: #ef4444;
+    margin-left: 0.25rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    outline: none;
+  }
+
+  select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234361ee'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+  }
+
+  .upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .file-upload {
+    position: relative;
+  }
+
+  .file-upload input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .file-upload-label:hover {
+    border-color: #4361ee;
+    background: #f1f5f9;
+  }
+
+  .file-upload-label i {
+    font-size: 2rem;
+    color: #4361ee;
+    margin-bottom: 0.75rem;
+  }
+
+  .file-upload-label span {
+    color: #475569;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .file-upload-label small {
+    color: #64748b;
+  }
+
+  .form-actions {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .btn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #4361ee 0%, #3730a3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+  }
+
   /* Home Page Styles */
   .home-container {
     max-width: 800px !important;
@@ -344,4 +530,1194 @@ body {
     font-size: 11px;
     line-height: 15px;
     text-align: center;
+  }
+
+  /* Payment Card Styles */
+  .payment-info {
+    margin: 20px 0;
+    padding: 1.5rem;
+  }
+
+  .payment-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .payment-step {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .step-icon {
+    width: 60px;
+    height: 60px;
+    background: #4361ee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+  }
+
+  .step-icon i {
+    color: white;
+    font-size: 24px;
+  }
+
+  .payment-step h4 {
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .atm-card {
+    background: linear-gradient(135deg, #0033A0 0%, #001B57 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.2),
+        inset 0 0 100px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    aspect-ratio: 1.586 / 1;
+    max-width: 400px;
+    font-family: 'Inter', sans-serif;
+}
+
+.card-chip-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.card-chip {
+    width: 45px;
+    height: 35px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-chip::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 25px;
+    background: 
+        linear-gradient(90deg, 
+            transparent 25%, 
+            rgba(255, 255, 255, 0.2) 25%, 
+            rgba(255, 255, 255, 0.2) 45%, 
+            transparent 45%
+        ),
+        linear-gradient(180deg, 
+            transparent 25%, 
+            rgba(255, 255, 255, 0.2) 25%, 
+            rgba(255, 255, 255, 0.2) 45%, 
+            transparent 45%
+        );
+    border-radius: 3px;
+}
+
+.card-contactless {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    transform: rotate(90deg);
+}
+
+.bank-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.bank-logo i {
+    font-size: 2rem;
+}
+
+.account-info {
+    margin-bottom: 2rem;
+}
+
+.account-number {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.account-holder {
+    line-height: 1.2;
+}
+
+.account-holder .label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.account-holder .name {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-type {
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.payment-details {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+.amount-label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.payment-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Add holographic effect */
+.atm-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        125deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 30%,
+        rgba(255, 255, 255, 0.1) 70%,
+        transparent 100%
+    );
+    transition: all 0.5s ease;
+}
+
+.atm-card:hover::before {
+    transform: translateX(100%);
+}
+
+  .card-chip {
+    width: 45px;
+    height: 35px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .card-chip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+
+  .bank-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .account-info {
+    margin-bottom: 1.5rem;
+  }
+
+  .account-number {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .account-holder {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+  }
+
+  .payment-details {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+
+  .amount-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+  }
+
+  .payment-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .upload-container {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .upload-area {
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .upload-area:hover {
+    border-color: #4361ee;
+    background: #f1f5f9;
+  }
+
+  .upload-area.has-file {
+    border-color: #4361ee;
+    background: rgba(67, 97, 238, 0.05);
+  }
+
+  .selected-file-info {
+    margin-top: 1rem;
+  }
+
+  .preview-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .preview-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .file-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: #4361ee;
+    font-size: 0.9rem;
+  }
+
+  .file-name {
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  .file-size {
+    color: #64748b;
+  }
+
+  .upload-area.has-file .upload-label {
+    padding: 1rem;
+  }
+
+  .upload-area.has-file:hover {
+    transform: translateY(-2px);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .upload-label i {
+    font-size: 2rem;
+    color: #4361ee;
+  }
+
+  .upload-label span {
+    color: #475569;
+    font-weight: 500;
+  }
+
+  .upload-label small {
+    color: #64748b;
+  }
+
+  .btn-upload {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .payment-status-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background: #f0fdf4;
+  }
+
+  .payment-status-container.pending {
+    background: #fff7ed;
+  }
+
+  .payment-status-container i {
+    font-size: 2.5rem;
+    color: #166534;
+  }
+
+  .payment-status-container.pending i {
+    color: #9a3412;
+  }
+
+  .status-message h4 {
+    color: #166534;
+    margin-bottom: 0.5rem;
+  }
+
+  .status-message.pending h4 {
+    color: #9a3412;
+  }
+
+  .status-message p {
+    color: #374151;
+    margin: 0;
+  }
+
+  /* Modern Home Page Styles */
+  .hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(28, 40, 106, 0.1) 100%);
+    border-radius: 24px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-section h1 {
+    font-size: 2.5rem;
+    color: #1a237e;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .tagline {
+    font-size: 1.25rem;
+    color: #4a5568;
+    margin-bottom: 2rem;
+  }
+
+  .motivation-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .quote {
+    position: relative;
+    padding: 1rem;
+  }
+
+  .quote i {
+    color: #4361ee;
+    font-size: 2rem;
+    opacity: 0.2;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .quote p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #2d3748;
+    margin: 1rem 0;
+    font-style: italic;
+  }
+
+  .quote .author {
+    display: block;
+    text-align: right;
+    color: #718096;
+    font-weight: 500;
+  }
+
+  .features-section {
+    padding: 3rem 0;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature-card i {
+    font-size: 2.5rem;
+    color: #4361ee;
+    margin-bottom: 1rem;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+  }
+
+  .step-number {
+    background: #4361ee;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #4361ee 0%, #3730a3 100%);
+    border-radius: 24px;
+    margin-top: 3rem;
+    color: white;
+  }
+
+  .cta-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+
+  /* Modern Dashboard Styles */
+  .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .welcome-section h1 {
+    font-size: 2rem;
+    color: #1a237e;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .dashboard-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #4361ee 0%, #3730a3 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .card-header i {
+    font-size: 1.5rem;
+  }
+
+  .card-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .profile-info .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 8px;
+  }
+
+  .info-item .label {
+    width: 120px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .info-item .value {
+    color: #1e293b;
+    font-weight: 500;
+  }
+
+  .status-badges {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .status-badge.pending {
+    background: #fff7ed;
+    color: #9a3412;
+  }
+
+  .status-badge.diterima {
+    background: #f0fdf4;
+    color: #166534;
+  }
+
+  .status-badge.ditolak {
+    background: #fef2f2;
+    color: #991b1b;
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .detail-item {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .detail-item .label {
+    display: block;
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .detail-item .value {
+    color: #1e293b;
+    font-weight: 500;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .empty-state i {
+    font-size: 4rem;
+    color: #e2e8f0;
+    margin-bottom: 1rem;
+  }
+
+  .empty-state h2 {
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state p {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Modern Registration Styles */
+  .auth-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .auth-header h2 {
+    color: #1a237e;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .auth-subtitle {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  .auth-form .form-section {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .auth-form .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-form label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #334155;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .auth-form label i {
+    color: #4361ee;
+    font-size: 1rem;
+  }
+
+  .auth-form .form-control {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .auth-form .form-control:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+  }
+
+  .password-input {
+    position: relative;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .toggle-password:hover {
+    color: #4361ee;
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .auth-footer p {
+    color: #64748b;
+  }
+
+  .auth-footer a {
+    color: #4361ee;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .auth-footer a:hover {
+    color: #3730a3;
+    text-decoration: underline;
+  }
+
+  /* Enhanced Login Page Styles */
+  .login-container {
+    max-width: 450px !important;
+  }
+
+  .school-logo {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4361ee 0%, #3730a3 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  .school-logo i {
+    font-size: 40px;
+    color: white;
+  }
+
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .auth-header h2 {
+    color: #1a237e;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .auth-subtitle {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  .alert {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .alert i {
+    font-size: 1.1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #334155;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group label i {
+    color: #4361ee;
+    font-size: 1rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    outline: none;
+  }
+
+  .password-input {
+    position: relative;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .toggle-password:hover {
+    color: #4361ee;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #4361ee 0%, #3730a3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .auth-footer p {
+    color: #64748b;
+    margin: 0.5rem 0;
+  }
+
+  .auth-footer a {
+    color: #4361ee;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .auth-footer a:hover {
+    color: #3730a3;
+    text-decoration: underline;
+  }
+
+  .admin-link {
+    margin-top: 1rem;
+  }
+
+  .admin-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .admin-link a:hover {
+    color: #4361ee;
+  }
+
+  /* Enhanced Bank Card Styles */
+  .bank-card-container {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+  }
+
+  .atm-card {
+    background: linear-gradient(135deg, #0033A0 0%, #001B57 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.2),
+        inset 0 0 100px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1.586 / 1;
+    max-width: 420px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+
+  .card-front {
+    position: relative;
+    height: 100%;
+  }
+
+  .card-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .bank-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bank-logo i {
+    font-size: 24px;
+    color: #FFD700;
+  }
+
+  .bank-logo span {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .card-chip {
+    width: 50px;
+    height: 40px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chip-line {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.1);
+    height: 35%;
+  }
+
+  .chip-line:nth-child(1) {
+    width: 100%;
+    top: 15%;
+  }
+
+  .chip-line:nth-child(2) {
+    width: 100%;
+    top: 45%;
+  }
+
+  .chip-line:nth-child(3) {
+    width: 100%;
+    top: 75%;
+  }
+
+  .card-body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-number {
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .card-holder, .bank-info {
+    flex: 1;
+  }
+
+  .card-info .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+
+  .card-info .value {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .payment-amount-container {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .amount-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .amount-label {
+    font-size: 14px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .amount-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 5px;
+  }
+
+  .amount-note {
+    font-size: 12px;
+    color: #64748b;
+    font-style: italic;
+  }
+
+  /* Holographic Effect */
+  .atm-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        125deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 30%,
+        rgba(255, 255, 255, 0.1) 70%,
+        transparent 100%
+    );
+    transition: transform 0.5s ease;
+  }
+
+  .atm-card:hover::before {
+    transform: translateX(100%);
+  }
+
+  .atm-card:hover {
+    transform: translateY(-5px) rotateY(5deg);
+  }
+
+  .card-number-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0;
+    padding: 10px 0;
+  }
+
+  .card-number-group {
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    color: white;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    min-width: 80px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+  }
+
+  /* Add hover effect for each number group */
+  .card-number-group:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
