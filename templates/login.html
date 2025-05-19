@@ -17,16 +17,6 @@
                 <p class="auth-subtitle">Silakan login untuk melanjutkan</p>
             </div>
 
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert">
-                            <i class="fas fa-info-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
 
             <form method="POST" class="auth-form">
                 <div class="form-group">
