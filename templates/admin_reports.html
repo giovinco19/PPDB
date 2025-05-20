@@ -193,8 +193,43 @@
                     label: 'Pendaftar per Hari',
                     data: {{ stats.trend_data }},
                     borderColor: '#4361ee',
-                    tension: 0.4
+                    backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#4361ee',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1  // Ensure y-axis shows whole numbers
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Trend Pendaftaran 7 Hari Terakhir'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.raw} pendaftar`;
+                            }
+                        }
+                    }
+                }
             }
         });
     </script>

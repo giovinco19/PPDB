@@ -1,12 +1,12 @@
 import os
-from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory
+from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from models import db, User, Pendaftaran
+from models import db, User, Pendaftaran, JadwalPendaftaran
 from functools import wraps
 from flask_migrate import Migrate
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'rahasia'
@@ -41,7 +41,9 @@ def admin_required(f):
 
 @app.route('/')
 def home():
-    return render_template('home.html', show_admin=True)
+    # Get all jadwal and sort by tanggal_mulai
+    jadwals = JadwalPendaftaran.query.order_by(JadwalPendaftaran.tanggal_mulai).all()
+    return render_template('home.html', jadwals=jadwals)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -243,19 +245,10 @@ def verifikasi_user():
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    if current_user.is_authenticated:
-        if current_user.role == 'admin':
-            return redirect(url_for('admin_dashboard'))
-        return redirect(url_for('dashboard'))
-
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         
-        if not username or not password:
-            flash('Harap isi username dan password')
-            return redirect(url_for('admin_login'))
-
         user = User.query.filter_by(username=username).first()
         
         if user and user.role == 'admin' and check_password_hash(user.password, password):
@@ -338,10 +331,8 @@ def admin_reports():
         'pembayaran_pending': len([p for p in all_pendaftar if p.status_pembayaran == 'pending']),
         'pembayaran_belum': len([p for p in all_pendaftar if p.status_pembayaran == 'belum']),
         
-        # Calculate total payments (assuming 6jt per student)
         'total_pembayaran': len([p for p in all_pendaftar if p.status_pembayaran == 'diterima']) * 6000000,
         
-        # Calculate acceptance rate
         'persentase_kelulusan': round(len([p for p in all_pendaftar if p.status_pendaftaran == 'diterima']) / len(all_pendaftar) * 100 if all_pendaftar else 0, 1)
     }
     
@@ -353,10 +344,90 @@ def admin_reports():
     stats['jurusan_labels'] = list(jurusan_count.keys())
     stats['jurusan_data'] = list(jurusan_count.values())
     
-    # Get registration trends (last 7 days)
-    from datetime import datetime, timedelta
-    trend_labels = [(datetime.now() - timedelta(days=i)).strftime('%d/%m') for i in range(6, -1, -1)]
+    # Get actual registration trends for last 7 days
+    
+    trend_labels = []
+    trend_data = []
+    
+    # Calculate registrations for each of the last 7 days
+    for i in range(6, -1, -1):
+        date = datetime.now().date() - timedelta(days=i)
+        next_date = date + timedelta(days=1)
+        
+        # Count registrations for this day
+        day_registrations = [p for p in all_pendaftar if p.created_at 
+                           and p.created_at.date() == date]
+        count = len(day_registrations)
+        
+        # Add to trend data
+        trend_labels.append(date.strftime('%d/%m'))
+        trend_data.append(count)
+
     stats['trend_labels'] = trend_labels
-    stats['trend_data'] = [0] * 7  # Placeholder for actual data
+    stats['trend_data'] = trend_data
 
     return render_template('admin_reports.html', stats=stats)
+
+@app.route('/admin/jadwal')
+@login_required
+@admin_required
+def admin_jadwal():
+    jadwals = JadwalPendaftaran.query.order_by(JadwalPendaftaran.tanggal_mulai).all()
+    return render_template('admin_jadwal.html', jadwals=jadwals)
+
+@app.route('/admin/jadwal/add', methods=['POST'])
+@login_required
+@admin_required
+def admin_jadwal_add():
+    jadwal = JadwalPendaftaran(
+        gelombang=request.form['gelombang'],
+        tanggal_mulai=datetime.strptime(request.form['tanggal_mulai'], '%Y-%m-%d'),
+        tanggal_selesai=datetime.strptime(request.form['tanggal_selesai'], '%Y-%m-%d'),
+        tanggal_pengumuman=datetime.strptime(request.form['tanggal_pengumuman'], '%Y-%m-%d')
+    )
+    db.session.add(jadwal)
+    db.session.commit()
+    return redirect(url_for('admin_jadwal'))
+
+@app.route('/admin/jadwal/edit/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def admin_jadwal_edit(id):
+    jadwal = JadwalPendaftaran.query.get_or_404(id)
+    jadwal.gelombang = request.form['gelombang']
+    jadwal.tanggal_mulai = datetime.strptime(request.form['tanggal_mulai'], '%Y-%m-%d')
+    jadwal.tanggal_selesai = datetime.strptime(request.form['tanggal_selesai'], '%Y-%m-%d')
+    jadwal.tanggal_pengumuman = datetime.strptime(request.form['tanggal_pengumuman'], '%Y-%m-%d')
+    db.session.commit()
+    return redirect(url_for('admin_jadwal'))
+
+@app.route('/admin/jadwal/get/<int:id>')
+@login_required
+@admin_required
+def admin_jadwal_get(id):
+    jadwal = JadwalPendaftaran.query.get_or_404(id)
+    return jsonify({
+        'gelombang': jadwal.gelombang,
+        'tanggal_mulai': jadwal.tanggal_mulai.strftime('%Y-%m-%d'),
+        'tanggal_selesai': jadwal.tanggal_selesai.strftime('%Y-%m-%d'),
+        'tanggal_pengumuman': jadwal.tanggal_pengumuman.strftime('%Y-%m-%d')
+    })
+
+@app.route('/admin/jadwal/toggle/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def admin_jadwal_toggle(id):
+    data = request.get_json()
+    jadwal = JadwalPendaftaran.query.get_or_404(id)
+    jadwal.status = data['status']
+    db.session.commit()
+    return jsonify({'success': True})
+
+@app.route('/admin/jadwal/delete/<int:id>', methods=['DELETE'])
+@login_required
+@admin_required
+def admin_jadwal_delete(id):
+    jadwal = JadwalPendaftaran.query.get_or_404(id)
+    db.session.delete(jadwal)
+    db.session.commit()
+    return jsonify({'success': True})

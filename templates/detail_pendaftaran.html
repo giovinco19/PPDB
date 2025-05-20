@@ -9,89 +9,187 @@
     <div class="admin-container">
         <div class="sidebar">
             <div class="logo">
-                Admin PPDB
+                <i class="fas fa-school"></i>
+                <span>Admin PPDB</span>
             </div>
             <div class="sidebar-menu">
                 <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
-                 <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
+                <a href="{{ url_for('admin_reports') }}"><i class="fas fa-chart-bar"></i> Laporan</a>
                 <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
         
         <div class="main-content">
-            <div class="dashboard-card">
-                <h2>Detail Pendaftaran</h2>
-                <div class="progress-overview">
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="nama">{{ pendaftaran.user.nama_lengkap }}</span>
-                            <span class="status {{ pendaftaran.status_pendaftaran }}">{{ pendaftaran.status_pendaftaran }}</span>
+            <div class="detail-container">
+                <div class="detail-header">
+                    <div class="header-content">
+                        <h1><i class="fas fa-user-circle"></i> Detail Pendaftaran</h1>
+                        <div class="status-badges">
+                            <span class="status-badge {{ pendaftaran.status_pendaftaran }}">
+                                <i class="fas fa-{{ 'check' if pendaftaran.status_pendaftaran == 'diterima' 
+                                    else 'clock' if pendaftaran.status_pendaftaran == 'pending' 
+                                    else 'times' }}"></i>
+                                {{ pendaftaran.status_pendaftaran|title }}
+                            </span>
+                            {% if pendaftaran.status_pembayaran != 'belum' %}
+                            <span class="status-badge {{ pendaftaran.status_pembayaran }}">
+                                <i class="fas fa-money-bill-wave"></i>
+                                Pembayaran {{ pendaftaran.status_pembayaran|title }}
+                            </span>
+                            {% endif %}
                         </div>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress" style="width: {{ pendaftaran.progress }}%"></div>
-                            </div>
-                            <span class="progress-text">{{ pendaftaran.progress }}% Selesai</span>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Progress Pendaftaran</span>
+                            <span class="percentage">{{ pendaftaran.progress }}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ pendaftaran.progress }}%"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="detail-info">
-                    <p><strong>Nama:</strong> {{ pendaftaran.user.nama_lengkap }}</p>
-                    <p><strong>Tempat Lahir:</strong> {{ pendaftaran.tempat_lahir }}</p>
-                    <p><strong>Tanggal Lahir:</strong> {{ pendaftaran.tanggal_lahir }}</p>
-                    <p><strong>Jenis Kelamin:</strong> {{ pendaftaran.jenis_kelamin }}</p>
-                    <p><strong>Asal Sekolah:</strong> {{ pendaftaran.asal_sekolah }}</p>
-                    <p><strong>Jurusan:</strong> {{ pendaftaran.jurusan }}</p>
-                    <p><strong>Tahun Lulus:</strong> {{ pendaftaran.tahun_lulus }}</p>
-                    <p><strong>Status:</strong> {{ pendaftaran.status_pendaftaran }}</p>
-                    
-                    <div class="dokumen">
-                        <h3>Dokumen</h3>
-                        <p><strong>Foto:</strong> 
-                            <a href="{{ url_for('uploaded_file', filename='photos/' + pendaftaran.foto) }}" target="_blank">
-                                Lihat Foto
-                            </a>
-                        </p>
-                        <p><strong>Ijazah:</strong> 
-                            <a href="{{ url_for('uploaded_file', filename='ijazah/' + pendaftaran.ijazah) }}" target="_blank">
-                                Lihat Ijazah
-                            </a>
-                        </p>
+                <div class="detail-grid">
+                    <!-- Data Pribadi -->
+                    <div class="detail-card">
+                        <div class="card-header">
+                            <i class="fas fa-user"></i>
+                            <h3>Data Pribadi</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label">Nama Lengkap</span>
+                                    <span class="value">{{ pendaftaran.user.nama_lengkap }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Tempat Lahir</span>
+                                    <span class="value">{{ pendaftaran.tempat_lahir }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Tanggal Lahir</span>
+                                    <span class="value">{{ pendaftaran.tanggal_lahir }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Jenis Kelamin</span>
+                                    <span class="value">{{ pendaftaran.jenis_kelamin }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    {% if pendaftaran.bukti_pembayaran %}
-                        <div class="payment-section">
-                            <h3>Informasi Pembayaran</h3>
-                            <p><strong>Status Pembayaran:</strong> {{ pendaftaran.status_pembayaran }}</p>
-                            <p><strong>Tanggal Upload:</strong> {{ pendaftaran.tanggal_pembayaran.strftime('%d-%m-%Y %H:%M') }}</p>
-                            <p><strong>Bukti Pembayaran:</strong>
-                                <a href="{{ url_for('uploaded_file', filename='payments/' + pendaftaran.bukti_pembayaran) }}" target="_blank">
-                                    Lihat Bukti
+
+                    <!-- Data Pendidikan -->
+                    <div class="detail-card">
+                        <div class="card-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Data Pendidikan</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label">Asal Sekolah</span>
+                                    <span class="value">{{ pendaftaran.asal_sekolah }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Jurusan</span>
+                                    <span class="value">{{ pendaftaran.jurusan }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Tahun Lulus</span>
+                                    <span class="value">{{ pendaftaran.tahun_lulus }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dokumen -->
+                    <div class="detail-card">
+                        <div class="card-header">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>Dokumen</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="document-grid">
+                                <a href="{{ url_for('uploaded_file', filename='photos/' + pendaftaran.foto) }}" 
+                                   class="document-item" target="_blank">
+                                    <div class="document-icon">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                    <div class="document-info">
+                                        <span class="doc-title">Pas Foto</span>
+                                        <span class="doc-action">Klik untuk melihat</span>
+                                    </div>
                                 </a>
-                            </p>
-                            
-                            {% if pendaftaran.status_pendaftaran == 'diterima' and pendaftaran.status_pembayaran == 'pending' %}
-                                <div class="payment-actions">
-                                    <a href="{{ url_for('verify_payment', id=pendaftaran.id) }}" class="btn btn-success">
-                                        <i class="fas fa-check"></i> Verifikasi Pembayaran
+                                <a href="{{ url_for('uploaded_file', filename='ijazah/' + pendaftaran.ijazah) }}" 
+                                   class="document-item" target="_blank">
+                                    <div class="document-icon">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div class="document-info">
+                                        <span class="doc-title">Ijazah</span>
+                                        <span class="doc-action">Klik untuk melihat</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if pendaftaran.bukti_pembayaran %}
+                    <!-- Pembayaran -->
+                    <div class="detail-card">
+                        <div class="card-header">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h3>Informasi Pembayaran</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label">Status Pembayaran</span>
+                                    <span class="value status-badge {{ pendaftaran.status_pembayaran }}">
+                                        {{ pendaftaran.status_pembayaran|title }}
+                                    </span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Tanggal Upload</span>
+                                    <span class="value">{{ pendaftaran.tanggal_pembayaran.strftime('%d-%m-%Y %H:%M') }}</span>
+                                </div>
+                                <div class="info-item wide">
+                                    <a href="{{ url_for('uploaded_file', filename='payments/' + pendaftaran.bukti_pembayaran) }}" 
+                                       class="document-item" target="_blank">
+                                        <div class="document-icon">
+                                            <i class="fas fa-receipt"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <span class="doc-title">Bukti Pembayaran</span>
+                                            <span class="doc-action">Klik untuk melihat</span>
+                                        </div>
                                     </a>
                                 </div>
+                            </div>
+                            
+                            {% if pendaftaran.status_pendaftaran == 'diterima' and pendaftaran.status_pembayaran == 'pending' %}
+                            <div class="action-buttons">
+                                <a href="{{ url_for('verify_payment', id=pendaftaran.id) }}" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Verifikasi Pembayaran
+                                </a>
+                            </div>
                             {% endif %}
                         </div>
-                    {% endif %}
-                    
-                    {% if pendaftaran.status_pendaftaran == 'pending' %}
-                        <div class="actions">
-                            <a href="{{ url_for('approve', id=pendaftaran.id) }}" class="btn btn-success">
-                                <i class="fas fa-check"></i> Terima Formulir
-                            </a>
-                            <a href="{{ url_for('reject', id=pendaftaran.id) }}" class="btn btn-danger">
-                                <i class="fas fa-times"></i> Tolak Formulir
-                            </a>
-                        </div>
+                    </div>
                     {% endif %}
                 </div>
+
+                {% if pendaftaran.status_pendaftaran == 'pending' %}
+                <div class="action-buttons">
+                    <a href="{{ url_for('approve', id=pendaftaran.id) }}" class="btn btn-success">
+                        <i class="fas fa-check"></i> Terima Pendaftaran
+                    </a>
+                    <a href="{{ url_for('reject', id=pendaftaran.id) }}" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Tolak Pendaftaran
+                    </a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

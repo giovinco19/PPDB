@@ -42,6 +42,109 @@
       </div>
     </div>
 
+    <!-- Jadwal Pendaftaran Section -->
+    <div class="jadwal-section">
+        <h2>Jadwal Pendaftaran</h2>
+        <div class="jadwal-grid">
+            {% if jadwals %}
+                {% for jadwal in jadwals %}
+                <div class="jadwal-card">
+                    <div class="gelombang-info">
+                        <h3>{{ jadwal.gelombang }}</h3>
+                        <span class="status {{ jadwal.status }}">
+                            {% if jadwal.status == 'active' %}
+                                Sedang Berlangsung
+                            {% else %}
+                                Akan Datang
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="date-info">
+                        <div class="date-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="date-content">
+                                <span class="label">Periode Pendaftaran</span>
+                                <span class="value">
+                                    {{ jadwal.tanggal_mulai.strftime('%d %B %Y') }} - 
+                                    {{ jadwal.tanggal_selesai.strftime('%d %B %Y') }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="date-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="date-content">
+                                <span class="label">Pengumuman</span>
+                                <span class="value">{{ jadwal.tanggal_pengumuman.strftime('%d %B %Y') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="jadwal-empty">
+                    <i class="fas fa-calendar-times"></i>
+                    <p>Belum ada jadwal pendaftaran yang tersedia</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Program Jurusan Section -->
+    <div class="jurusan-section">
+        <h2>Program Jurusan Unggulan</h2>
+        <div class="jurusan-slider">
+            <div class="slider-container">
+                <div class="slide">
+                    <div class="jurusan-card">
+                        <img src="{{ url_for('static', filename='img/jurusan/teknik-komputer.png') }}" alt="Teknik Komputer">
+                        <div class="jurusan-content">
+                            <h3>Teknik Komputer & Jaringan</h3>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> Pemrograman Web & Mobile</li>
+                                <li><i class="fas fa-check-circle"></i> Jaringan Komputer</li>
+                                <li><i class="fas fa-check-circle"></i> Hardware & Troubleshooting</li>
+                            </ul>
+                            <a href="#" class="btn-jurusan">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="jurusan-card">
+                        <img src="{{ url_for('static', filename='img/jurusan/perhotelan.png') }}" alt="Perhotelan">
+                        <div class="jurusan-content">
+                            <h3>Multimedia & Desain</h3>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> Desain Grafis</li>
+                                <li><i class="fas fa-check-circle"></i> Video Editing</li>
+                                <li><i class="fas fa-check-circle"></i> Animasi 3D</li>
+                            </ul>
+                            <a href="#" class="btn-jurusan">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="jurusan-card">
+                        <img src="{{ url_for('static', filename='img/jurusan/tsm.png') }}" alt="Teknik Sepeda Motor">
+                        <div class="jurusan-content">
+                            <h3>Teknik Mesin</h3>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> Pemrograman CNC</li>
+                                <li><i class="fas fa-check-circle"></i> Pengelasan</li>
+                                <li><i class="fas fa-check-circle"></i> AutoCAD</li>
+                            </ul>
+                            <a href="#" class="btn-jurusan">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <div class="slider-dots"></div>
+                <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
     <div class="steps-container glass-card">
       <h2>Langkah Pendaftaran</h2>
       <div class="steps">
@@ -83,5 +186,85 @@
       </div>
     </div>
   </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const dotsContainer = document.querySelector('.slider-dots');
+    
+    let currentSlide = 0;
+    let slideInterval;
+
+    // Inisialisasi slide pertama sebagai active
+    slides[0].classList.add('active');
+
+    // Buat dots indicator
+    slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateDots() {
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
+
+    function goToSlide(index) {
+        // Hapus class active dari semua slide
+        slides.forEach(slide => slide.classList.remove('active'));
+        // Tambah class active ke slide yang dipilih
+        slides[index].classList.add('active');
+        currentSlide = index;
+        updateDots();
+    }
+
+    function nextSlide() {
+        const next = (currentSlide + 1) % slides.length;
+        goToSlide(next);
+    }
+
+    function prevSlide() {
+        const prev = (currentSlide - 1 + slides.length) % slides.length;
+        goToSlide(prev);
+    }
+
+    // Auto slide
+    function startSlideShow() {
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    function stopSlideShow() {
+        clearInterval(slideInterval);
+    }
+
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        stopSlideShow();
+        startSlideShow();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        stopSlideShow();
+        startSlideShow();
+    });
+
+    const slider = document.querySelector('.slider-container');
+    slider.addEventListener('mouseenter', stopSlideShow);
+    slider.addEventListener('mouseleave', startSlideShow);
+
+    // Mulai slideshow
+    startSlideShow();
+});
+</script>
 </body>
 </html>

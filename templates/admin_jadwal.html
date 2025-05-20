@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pengaturan Jadwal - Admin PPDB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <div class="logo">Admin PPDB</div>
+            <div class="sidebar-menu">
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="{{ url_for('admin_jadwal') }}" class="active"><i class="fas fa-calendar-alt"></i> Jadwal</a>
+                <a href="{{ url_for('admin_reports') }}"><i class="fas fa-chart-bar"></i> Laporan</a>
+                <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="jadwal-header">
+                <h1>Pengaturan Jadwal Pendaftaran</h1>
+                <button class="btn btn-primary" onclick="showAddForm()">
+                    <i class="fas fa-plus"></i> Tambah Jadwal
+                </button>
+            </div>
+
+            <div class="jadwal-grid">
+                {% for jadwal in jadwals %}
+                <div class="jadwal-card">
+                    <div class="jadwal-actions">
+                        <button class="btn-edit" onclick="editJadwal({{ jadwal.id }})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete" onclick="deleteJadwal({{ jadwal.id }})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="jadwal-status {{ jadwal.status }}">
+                        {{ jadwal.status|title }}
+                    </div>
+                    
+                    <h3>{{ jadwal.gelombang }}</h3>
+                    
+                    <div class="jadwal-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="detail-content">
+                                <span class="label">Periode Pendaftaran</span>
+                                <span class="value">
+                                    {{ jadwal.tanggal_mulai.strftime('%d/%m/%Y') }} - 
+                                    {{ jadwal.tanggal_selesai.strftime('%d/%m/%Y') }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="detail-content">
+                                <span class="label">Tanggal Pengumuman</span>
+                                <span class="value">{{ jadwal.tanggal_pengumuman.strftime('%d/%m/%Y') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="jadwal-toggle">
+                        <label class="switch">
+                            <input type="checkbox" 
+                                   {% if jadwal.status == 'active' %}checked{% endif %}
+                                   onchange="toggleStatus({{ jadwal.id }}, this.checked)">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-label">Status Aktif</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Jadwal -->
+    <div id="jadwalModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Tambah Jadwal Baru</h2>
+            <form id="jadwalForm" method="POST">
+                <div class="form-group">
+                    <label>Gelombang</label>
+                    <input type="text" name="gelombang" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Mulai</label>
+                    <input type="date" name="tanggal_mulai" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Selesai</label>
+                    <input type="date" name="tanggal_selesai" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Pengumuman</label>
+                    <input type="date" name="tanggal_pengumuman" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showAddForm() {
+            document.getElementById('modalTitle').textContent = 'Tambah Jadwal Baru';
+            document.getElementById('jadwalForm').action = "{{ url_for('admin_jadwal_add') }}";
+            document.getElementById('jadwalModal').style.display = 'block';
+        }
+
+        function editJadwal(id) {
+            document.getElementById('modalTitle').textContent = 'Edit Jadwal';
+            document.getElementById('jadwalForm').action = `/admin/jadwal/edit/${id}`;
+            // Fetch and fill existing data
+            fetch(`/admin/jadwal/get/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('input[name="gelombang"]').value = data.gelombang;
+                    document.querySelector('input[name="tanggal_mulai"]').value = data.tanggal_mulai;
+                    document.querySelector('input[name="tanggal_selesai"]').value = data.tanggal_selesai;
+                    document.querySelector('input[name="tanggal_pengumuman"]').value = data.tanggal_pengumuman;
+                });
+            document.getElementById('jadwalModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('jadwalModal').style.display = 'none';
+        }
+
+        function toggleStatus(id, isActive) {
+            fetch(`/admin/jadwal/toggle/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: isActive ? 'active' : 'upcoming'
+                })
+            }).then(() => {
+                window.location.reload();
+            });
+        }
+
+        function deleteJadwal(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
+                fetch(`/admin/jadwal/delete/${id}`, {
+                    method: 'DELETE'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('jadwalModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

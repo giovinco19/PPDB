@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -41,3 +42,14 @@ class Pendaftaran(db.Model):
     tanggal_pembayaran = db.Column(db.DateTime)
     notification_shown = db.Column(db.Boolean, default=False)
     payment_notification_shown = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class JadwalPendaftaran(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    gelombang = db.Column(db.String(50))
+    tanggal_mulai = db.Column(db.Date)
+    tanggal_selesai = db.Column(db.Date)
+    tanggal_pengumuman = db.Column(db.Date)
+    status = db.Column(db.String(20), default='upcoming')  # 'active' atau 'upcoming'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)

@@ -21,7 +21,8 @@ def init_db():
                 nama_lengkap='Administrator',
                 no_hp='0',
                 alamat='Admin Address',
-                role='admin'  # Make sure role is set
+                email='admin@admin.com',  # Tambahkan email karena required
+                role='admin'
             )
             db.session.add(admin)
             db.session.commit()

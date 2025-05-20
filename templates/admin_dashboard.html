@@ -16,6 +16,7 @@
             </div>
             <div class="sidebar-menu">
                 <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="{{ url_for('admin_jadwal') }}" class="active"><i class="fas fa-calendar-alt"></i> Jadwal</a>
                  <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
                 <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
@@ -23,14 +24,14 @@
         
         <div class="main-content">
             <div class="dashboard-card">
-                <h2>Data Pendaftaran</h2>
-                <table id="pendaftaranTable" class="table table-striped">
+                <div class="card-header">
+                    <h2><i class="fas fa-database"></i> Data Pendaftaran</h2>
+
+                <div class="table-responsive">
+                    <table id="pendaftaranTable" class="table table-striped">
                     <thead>
                         <tr>
                             <th>Nama</th>
-                            <th>Tempat Lahir</th>
-                            <th>Tanggal Lahir</th>
-                            <th>Jenis Kelamin</th>
                             <th>Asal Sekolah</th>
                             <th>Jurusan</th>
                             <th>Status</th>
@@ -42,9 +43,6 @@
                         {% for row in data %}
                         <tr>
                             <td>{{ row.user.nama_lengkap }}</td>
-                            <td>{{ row.tempat_lahir }}</td>
-                            <td>{{ row.tanggal_lahir }}</td>
-                            <td>{{ row.jenis_kelamin }}</td>
                             <td>{{ row.asal_sekolah }}</td>
                             <td>{{ row.jurusan }}</td>
                             <td>
@@ -55,37 +53,27 @@
                             <td>
                                 {% if row.status_pendaftaran == 'diterima' %}
                                     {% if row.status_pembayaran == 'belum' %}
-                                        <span class="badge payment-status warning">
-                                            <i class="fas fa-exclamation-circle"></i> Belum Bayar
-                                        </span>
+                                        <span class="badge payment-status warning">Belum</span>
                                     {% elif row.status_pembayaran == 'pending' %}
-                                        <span class="badge payment-status pending">
-                                            <i class="fas fa-clock"></i> Menunggu Verifikasi
-                                        </span>
+                                        <span class="badge payment-status pending">Pending</span>
                                     {% elif row.status_pembayaran == 'diterima' %}
-                                        <span class="badge payment-status success">
-                                            <i class="fas fa-check-circle"></i> Lunas
-                                        </span>
+                                        <span class="badge payment-status success">Lunas</span>
                                     {% elif row.status_pembayaran == 'ditolak' %}
-                                        <span class="badge payment-status danger">
-                                            <i class="fas fa-times-circle"></i> Ditolak
-                                        </span>
+                                        <span class="badge payment-status danger">Ditolak</span>
                                     {% endif %}
                                 {% else %}
-                                    <span class="badge payment-status disabled">
-                                        <i class="fas fa-minus-circle"></i> N/A
-                                    </span>
+                                    <span class="badge payment-status disabled">N/A</span>
                                 {% endif %}
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <a href="{{ url_for('detail_pendaftaran', id=row.id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ url_for('detail_pendaftaran', id=row.id) }}" class="btn btn-info btn-sm" title="Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ url_for('approve', id=row.id) }}" class="btn btn-success btn-sm">
+                                    <a href="{{ url_for('approve', id=row.id) }}" class="btn btn-success btn-sm" title="Terima">
                                         <i class="fas fa-check"></i>
                                     </a>
-                                    <a href="{{ url_for('reject', id=row.id) }}" class="btn btn-danger btn-sm">
+                                    <a href="{{ url_for('reject', id=row.id) }}" class="btn btn-danger btn-sm" title="Tolak">
                                         <i class="fas fa-times"></i>
                                     </a>
                                 </div>
@@ -94,6 +82,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
