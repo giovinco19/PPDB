@@ -9,9 +9,10 @@
 <body>
     <div class="admin-container">
         <div class="sidebar">
-            <div class="logo">Admin PPDB</div>
+            <div class="logo">Admin SMK KARYA BANGSA</div>
             <div class="sidebar-menu">
                 <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="{{ url_for('admin_jadwal') }}" class="active"><i class="fas fa-calendar-alt"></i> Jadwal</a>
                 <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
                 <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
@@ -113,6 +114,87 @@
                     </div>
                     <div class="chart-container">
                         <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tambahkan card untuk statistik jenis kelamin -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users"></i> Statistik Jenis Kelamin</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="genderChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Card untuk rata-rata umur -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-birthday-cake"></i> Rata-rata Umur</h2>
+                    </div>
+                    <div class="stats-summary text-center">
+                        <div class="age-display">
+                            <span class="big-number">{{ stats.rata_rata_umur }}</span>
+                            <span class="age-label">Tahun</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistik Asal Sekolah -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-school"></i> Statistik Asal Sekolah</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="sekolahChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Statistik Alamat -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-map-marker-alt"></i> Sebaran Alamat Pendaftar</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="alamatChart"></canvas>
+                    </div>
+                    <div class="alamat-stats-detail">
+                        <h4>Detail Sebaran:</h4>
+                        <div class="stats-list">
+                            {% for i in range(stats.alamat_stats.labels|length) %}
+                            <div class="stat-item">
+                                <span class="stat-label">{{ stats.alamat_stats.labels[i] }}</span>
+                                <span class="stat-value">
+                                    {{ stats.alamat_stats.data[i] }} siswa 
+                                    ({{ stats.alamat_stats.percentages[i] }}%)
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistik Agama -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-pray"></i> Statistik Agama</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="agamaChart"></canvas>
+                    </div>
+                    <div class="agama-stats-detail">
+                        <h4>Detail Statistik Agama:</h4>
+                        <div class="stats-list">
+                            {% for i in range(stats.agama_stats.labels|length) %}
+                            <div class="stat-item">
+                                <span class="stat-label">{{ stats.agama_stats.labels[i] }}</span>
+                                <span class="stat-value">
+                                    {{ stats.agama_stats.data[i] }} siswa 
+                                    ({{ stats.agama_stats.percentages[i] }}%)
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -232,6 +314,209 @@
                 }
             }
         });
+
+        // Gender Chart
+        new Chart(document.getElementById('genderChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Laki-laki', 'Perempuan'],
+                datasets: [{
+                    data: [
+                        {{ stats.jenis_kelamin.laki_laki }},
+                        {{ stats.jenis_kelamin.perempuan }}
+                    ],
+                    backgroundColor: ['#4361ee', '#e83e8c']
+                }],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Asal Sekolah Chart
+        new Chart(document.getElementById('sekolahChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ stats.sekolah_stats.labels|tojson }},
+                datasets: [{
+                    label: 'Jumlah Pendaftar',
+                    data: {{ stats.sekolah_stats.data|tojson }},
+                    backgroundColor: '#4361ee',
+                    borderColor: '#3730a3',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Alamat Chart
+        new Chart(document.getElementById('alamatChart'), {
+            type: 'pie',
+            data: {
+                labels: {{ stats.alamat_stats.labels|tojson }},
+                datasets: [{
+                    data: {{ stats.alamat_stats.data|tojson }},
+                    backgroundColor: [
+                        '#4361ee',
+                        '#3730a3',
+                        '#818cf8',
+                        '#60a5fa',
+                        '#7c3aed',
+                        '#6d28d9'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                let percentage = {{ stats.alamat_stats.percentages|tojson }}[context.dataIndex];
+                                return `${label}: ${value} siswa (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Agama Chart
+        new Chart(document.getElementById('agamaChart'), {
+            type: 'pie',
+            data: {
+                labels: {{ stats.agama_stats.labels|tojson }},
+                datasets: [{
+                    data: {{ stats.agama_stats.data|tojson }},
+                    backgroundColor: [
+                        '#4361ee',
+                        '#3730a3',
+                        '#818cf8',
+                        '#60a5fa',
+                        '#7c3aed',
+                        '#6d28d9'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                let percentage = {{ stats.agama_stats.percentages|tojson }}[context.dataIndex];
+                                return `${label}: ${value} siswa (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     </script>
+
+    <style>
+        .age-display {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .big-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4361ee;
+            display: block;
+        }
+        
+        .age-label {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .alamat-stats-detail {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .alamat-stats-detail h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .stats-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .stat-label {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .agama-stats-detail {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .agama-stats-detail h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+    </style>
 </body>
 </html>

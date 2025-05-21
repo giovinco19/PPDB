@@ -10,7 +10,7 @@
   <div class="container home-container">
     <div class="hero-section">
       <h1>Selamat Datang di PPDB SMK KARYA BANGSA</h1>
-      <p class="tagline">"Membangun Masa Depan Cemerlang Melalui Pendidikan Berkualitas"</p>
+      <p class="tagline">"Labor Omnia Vincit"</p>
       
       <div class="motivation-card">
         <div class="quote">
@@ -104,13 +104,13 @@
                                 <li><i class="fas fa-check-circle"></i> Jaringan Komputer</li>
                                 <li><i class="fas fa-check-circle"></i> Hardware & Troubleshooting</li>
                             </ul>
-                            <a href="#" class="btn-jurusan">Pelajari Lebih Lanjut</a>
+                            <a href="{{ url_for('detail_jurusan', nama_jurusan='tkj') }}" class="btn-jurusan">Pelajari Lebih Lanjut</a>
                         </div>
                     </div>
                 </div>
                 <div class="slide">
                     <div class="jurusan-card">
-                        <img src="{{ url_for('static', filename='img/jurusan/perhotelan.png') }}" alt="Perhotelan">
+                        <img src="{{ url_for('static', filename='img/jurusan/perhotelan.png') }}" alt="Multimedia">
                         <div class="jurusan-content">
                             <h3>Multimedia & Desain</h3>
                             <ul>
@@ -118,13 +118,13 @@
                                 <li><i class="fas fa-check-circle"></i> Video Editing</li>
                                 <li><i class="fas fa-check-circle"></i> Animasi 3D</li>
                             </ul>
-                            <a href="#" class="btn-jurusan">Pelajari Lebih Lanjut</a>
+                            <a href="{{ url_for('detail_jurusan', nama_jurusan='multimedia') }}" class="btn-jurusan">Pelajari Lebih Lanjut</a>
                         </div>
                     </div>
                 </div>
                 <div class="slide">
                     <div class="jurusan-card">
-                        <img src="{{ url_for('static', filename='img/jurusan/tsm.png') }}" alt="Teknik Sepeda Motor">
+                        <img src="{{ url_for('static', filename='img/jurusan/tsm.png') }}" alt="Teknik Mesin">
                         <div class="jurusan-content">
                             <h3>Teknik Mesin</h3>
                             <ul>
@@ -132,7 +132,7 @@
                                 <li><i class="fas fa-check-circle"></i> Pengelasan</li>
                                 <li><i class="fas fa-check-circle"></i> AutoCAD</li>
                             </ul>
-                            <a href="#" class="btn-jurusan">Pelajari Lebih Lanjut</a>
+                            <a href="{{ url_for('detail_jurusan', nama_jurusan='mesin') }}" class="btn-jurusan">Pelajari Lebih Lanjut</a>
                         </div>
                     </div>
                 </div>

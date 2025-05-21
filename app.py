@@ -145,7 +145,8 @@ def form_pendaftaran():
                 foto=foto_filename,
                 ijazah=ijazah_filename,
                 status_pendaftaran='pending',
-                progress=50  # Set initial progress to 50%
+                progress=50,  # Set initial progress to 50%
+                agama=request.form.get('agama')  # Tambahkan field agama
             )
             
             db.session.add(pendaftaran)
@@ -314,26 +315,94 @@ def verify_payment(id):
 @login_required
 @admin_required
 def admin_reports():
-    # Get statistics
     all_pendaftar = Pendaftaran.query.all()
+    total_pendaftar = len(all_pendaftar)
+
+    # Hitung statistik jenis kelamin
+    jk_stats = {
+        'laki_laki': len([p for p in all_pendaftar if p.jenis_kelamin == 'Laki-laki']),
+        'perempuan': len([p for p in all_pendaftar if p.jenis_kelamin == 'Perempuan'])
+    }
+    
+    # Hitung rata-rata umur
+    from datetime import datetime
+    total_umur = 0
+    for p in all_pendaftar:
+        if p.tanggal_lahir:
+            tgl_lahir = datetime.strptime(p.tanggal_lahir, '%Y-%m-%d')
+            umur = datetime.now().year - tgl_lahir.year
+            total_umur += umur
+    
+    avg_umur = round(total_umur / len(all_pendaftar)) if all_pendaftar else 0
+    
+    # Hitung statistik asal sekolah
+    sekolah_count = {}
+    for p in all_pendaftar:
+        if p.asal_sekolah:
+            sekolah_count[p.asal_sekolah] = sekolah_count.get(p.asal_sekolah, 0) + 1
+    
+    # Hitung statistik alamat dengan persentase
+    alamat_count = {}
+    for p in all_pendaftar:
+        if p.alamat:
+            alamat_parts = p.alamat.split(',')
+            if len(alamat_parts) > 1:
+                kota = alamat_parts[-1].strip()
+            else:
+                kota = p.alamat
+            alamat_count[kota] = alamat_count.get(kota, 0) + 1
+
+    # Hitung persentase untuk setiap alamat
+    alamat_stats = {
+        'labels': [],
+        'data': [],
+        'percentages': []
+    }
+    
+    for kota, jumlah in alamat_count.items():
+        percentage = round((jumlah / total_pendaftar) * 100, 1) if total_pendaftar > 0 else 0
+        alamat_stats['labels'].append(kota)
+        alamat_stats['data'].append(jumlah)
+        alamat_stats['percentages'].append(percentage)
+
+    # Hitung statistik agama
+    agama_count = {}
+    for p in all_pendaftar:
+        if p.agama:
+            agama_count[p.agama] = agama_count.get(p.agama, 0) + 1
+    
+    # Hitung persentase untuk setiap agama
+    agama_stats = {
+        'labels': list(agama_count.keys()),
+        'data': list(agama_count.values()),
+        'percentages': []
+    }
+    
+    for jumlah in agama_count.values():
+        percentage = round((jumlah / total_pendaftar) * 100, 1) if total_pendaftar > 0 else 0
+        agama_stats['percentages'].append(percentage)
+
     stats = {
         'total_pendaftar': len(all_pendaftar),
         'diterima': len([p for p in all_pendaftar if p.status_pendaftaran == 'diterima']),
         'pending': len([p for p in all_pendaftar if p.status_pendaftaran == 'pending']),
         'ditolak': len([p for p in all_pendaftar if p.status_pendaftaran == 'ditolak']),
-        
-        # Jurusan statistics
         'jurusan_labels': [],
         'jurusan_data': [],
-        
-        # Payment statistics
         'pembayaran_lunas': len([p for p in all_pendaftar if p.status_pembayaran == 'diterima']),
         'pembayaran_pending': len([p for p in all_pendaftar if p.status_pembayaran == 'pending']),
         'pembayaran_belum': len([p for p in all_pendaftar if p.status_pembayaran == 'belum']),
-        
         'total_pembayaran': len([p for p in all_pendaftar if p.status_pembayaran == 'diterima']) * 6000000,
-        
-        'persentase_kelulusan': round(len([p for p in all_pendaftar if p.status_pendaftaran == 'diterima']) / len(all_pendaftar) * 100 if all_pendaftar else 0, 1)
+        'persentase_kelulusan': round(len([p for p in all_pendaftar if p.status_pendaftaran == 'diterima']) / len(all_pendaftar) * 100 if all_pendaftar else 0, 1),
+        # Tambahkan statistik baru
+        'jenis_kelamin': jk_stats,
+        'rata_rata_umur': avg_umur,
+        'sekolah_stats': {
+            'labels': list(sekolah_count.keys()),
+            'data': list(sekolah_count.values())
+        },
+        'alamat_stats': alamat_stats,
+        'agama_stats': agama_stats
     }
     
     # Get jurusan distribution
@@ -431,3 +500,101 @@ def admin_jadwal_delete(id):
     db.session.delete(jadwal)
     db.session.commit()
     return jsonify({'success': True})
+
+@app.route('/jurusan/<string:nama_jurusan>')
+def detail_jurusan(nama_jurusan):
+    jurusan_data = {
+        'tkj': {
+            'nama': 'Teknik Komputer & Jaringan',
+            'image': 'teknik-komputer.png',
+            'deskripsi': 'Program keahlian yang mempelajari tentang pemrograman, jaringan komputer, dan hardware.',
+            'keunggulan': [
+                'Lab Komputer Modern',
+                'Sertifikasi Internasional',
+                'Kerjasama dengan Industri IT'
+            ],
+            'prospek_kerja': [
+                'Network Engineer',
+                'Software Developer',
+                'IT Support Specialist',
+                'System Administrator'
+            ],
+            'fasilitas': [
+                'Lab Komputer dengan PC Terbaru',
+                'Cisco Networking Academy',
+                'Workshop Hardware',
+                'Software Development Studio'
+            ]
+        },
+        'multimedia': {
+            'nama': 'Multimedia & Desain',
+            'image': 'perhotelan.png',
+            'deskripsi': 'Program keahlian yang fokus pada pengembangan konten digital dan desain kreatif.',
+            'keunggulan': [
+                'Studio Multimedia Lengkap',
+                'Project Based Learning',
+                'Portfolio Development'
+            ],
+            'prospek_kerja': [
+                'Graphic Designer',
+                'Video Editor',
+                '3D Artist',
+                'Content Creator'
+            ],
+            'fasilitas': [
+                'Adobe Creative Suite',
+                'Motion Capture Studio',
+                'Audio Recording Room',
+                'Video Editing Suite'
+            ]
+        },
+        'mesin': {
+            'nama': 'Teknik Mesin',
+            'image': 'tsm.png',
+            'deskripsi': 'Program keahlian yang mempelajari tentang permesinan, pengelasan, dan desain teknik.',
+            'keunggulan': [
+                'Workshop Berstandar Industri',
+                'Praktisi Berpengalaman',
+                'Sertifikasi Keahlian'
+            ],
+            'prospek_kerja': [
+                'Teknisi Mesin',
+                'Operator CNC',
+                'Welder Specialist',
+                'CAD Designer'
+            ],
+            'fasilitas': [
+                'CNC Workshop',
+                'Welding Laboratory',
+                'CAD/CAM Studio',
+                'Quality Control Lab'
+            ]
+        }
+    }
+    
+    jurusan = jurusan_data.get(nama_jurusan.lower())
+    if not jurusan:
+        return redirect(url_for('home'))
+        
+    return render_template('detail_jurusan.html', jurusan=jurusan)
+
+@app.route('/admin/delete/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_pendaftaran(id):
+    pendaftaran = Pendaftaran.query.get_or_404(id)
+    
+    try:
+        # Hapus file yang terkait
+        if pendaftaran.foto:
+            os.remove(os.path.join(app.root_path, 'uploads/photos', pendaftaran.foto))
+        if pendaftaran.ijazah:
+            os.remove(os.path.join(app.root_path, 'uploads/ijazah', pendaftaran.ijazah))
+        if pendaftaran.bukti_pembayaran:
+            os.remove(os.path.join(app.root_path, 'uploads/payments', pendaftaran.bukti_pembayaran))
+            
+        db.session.delete(pendaftaran)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Data berhasil dihapus'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500

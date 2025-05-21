@@ -43,6 +43,7 @@ class Pendaftaran(db.Model):
     notification_shown = db.Column(db.Boolean, default=False)
     payment_notification_shown = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    agama = db.Column(db.String(20))  # Tambahkan kolom agama
 
 class JadwalPendaftaran(db.Model):
     id = db.Column(db.Integer, primary_key=True)

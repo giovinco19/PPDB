@@ -17,7 +17,7 @@
             <div class="sidebar-menu">
                 <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="{{ url_for('admin_jadwal') }}" class="active"><i class="fas fa-calendar-alt"></i> Jadwal</a>
-                 <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
+                <a href="{{ url_for('admin_reports') }}" class="active"><i class="fas fa-chart-bar"></i> Laporan</a>
                 <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
@@ -76,6 +76,10 @@
                                     <a href="{{ url_for('reject', id=row.id) }}" class="btn btn-danger btn-sm" title="Tolak">
                                         <i class="fas fa-times"></i>
                                     </a>
+                                    <!-- Tambahkan tombol hapus -->
+                                    <button onclick="confirmDelete({{ row.id }})" class="btn btn-danger btn-sm" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -97,7 +101,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             $('#pendaftaranTable').DataTable({
@@ -125,6 +129,54 @@
                 }
             });
         });
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data pendaftaran akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Kirim request hapus
+                    fetch(`/admin/delete/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.status === 'success') {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Data pendaftaran berhasil dihapus.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                data.message,
+                                'error'
+                            );
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan saat menghapus data.',
+                            'error'
+                        );
+                    });
+                }
+            })
+        }
     </script>
 </body>
 </html>

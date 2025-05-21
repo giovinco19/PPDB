@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pengaturan Jadwal - Admin PPDB</title>
+    <title>Manajemen Jadwal - Admin</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="admin-container">
         <div class="sidebar">
-            <div class="logo">Admin PPDB</div>
+            <div class="logo">Admin SMK KARYA BANGSA</div>
             <div class="sidebar-menu">
                 <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="{{ url_for('admin_jadwal') }}" class="active"><i class="fas fa-calendar-alt"></i> Jadwal</a>
@@ -19,10 +19,63 @@
         
         <div class="main-content">
             <div class="jadwal-header">
-                <h1>Pengaturan Jadwal Pendaftaran</h1>
-                <button class="btn btn-primary" onclick="showAddForm()">
-                    <i class="fas fa-plus"></i> Tambah Jadwal
+                <h1><i class="fas fa-calendar-alt"></i> Manajemen Jadwal Pendaftaran</h1>
+                <button onclick="openModal()" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Periode
                 </button>
+            </div>
+
+            <!-- Modal Tambah/Edit Jadwal -->
+            <div id="jadwalModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-calendar-plus"></i> Tambah Periode Pendaftaran</h2>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                    </div>
+                    <form id="jadwalForm" method="POST" action="{{ url_for('admin_jadwal_add') }}" class="modern-form">
+                        <div class="modal-body">
+                            <div class="input-group">
+                                <label for="gelombang">
+                                    <i class="fas fa-layer-group"></i> Gelombang
+                                </label>
+                                <input type="text" id="gelombang" name="gelombang" class="form-control" required 
+                                       placeholder="Contoh: Gelombang 1">
+                            </div>
+                            
+                            <div class="date-inputs">
+                                <div class="input-group">
+                                    <label for="tanggal_mulai">
+                                        <i class="fas fa-calendar-check"></i> Tanggal Mulai
+                                    </label>
+                                    <input type="date" id="tanggal_mulai" name="tanggal_mulai" class="form-control" required>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label for="tanggal_selesai">
+                                        <i class="fas fa-calendar-times"></i> Tanggal Selesai
+                                    </label>
+                                    <input type="date" id="tanggal_selesai" name="tanggal_selesai" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="tanggal_pengumuman">
+                                    <i class="fas fa-bullhorn"></i> Tanggal Pengumuman
+                                </label>
+                                <input type="date" id="tanggal_pengumuman" name="tanggal_pengumuman" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div class="jadwal-grid">
@@ -78,37 +131,164 @@
         </div>
     </div>
 
-    <!-- Modal Tambah/Edit Jadwal -->
-    <div id="jadwalModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modalTitle">Tambah Jadwal Baru</h2>
-            <form id="jadwalForm" method="POST">
-                <div class="form-group">
-                    <label>Gelombang</label>
-                    <input type="text" name="gelombang" required>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Mulai</label>
-                    <input type="date" name="tanggal_mulai" required>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Selesai</label>
-                    <input type="date" name="tanggal_selesai" required>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Pengumuman</label>
-                    <input type="date" name="tanggal_pengumuman" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: #4361ee;
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .close {
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .input-group label i {
+            color: #4361ee;
+        }
+
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            outline: none;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #4361ee;
+            color: white;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .date-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+        }
+    </style>
 
     <script>
+        function openModal() {
+            const modal = document.getElementById('jadwalModal');
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('jadwalModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
         function showAddForm() {
             document.getElementById('modalTitle').textContent = 'Tambah Jadwal Baru';
             document.getElementById('jadwalForm').action = "{{ url_for('admin_jadwal_add') }}";
@@ -128,10 +308,6 @@
                     document.querySelector('input[name="tanggal_pengumuman"]').value = data.tanggal_pengumuman;
                 });
             document.getElementById('jadwalModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('jadwalModal').style.display = 'none';
         }
 
         function toggleStatus(id, isActive) {
@@ -160,8 +336,28 @@
 
         // Close modal when clicking outside
         window.onclick = function(event) {
-            if (event.target == document.getElementById('jadwalModal')) {
+            const modal = document.getElementById('jadwalModal');
+            if (event.target == modal) {
                 closeModal();
+            }
+        }
+
+        // Validate dates when form is submitted
+        document.getElementById('jadwalForm').onsubmit = function(e) {
+            const mulai = new Date(this.tanggal_mulai.value);
+            const selesai = new Date(this.tanggal_selesai.value);
+            const pengumuman = new Date(this.tanggal_pengumuman.value);
+
+            if (selesai < mulai) {
+                e.preventDefault();
+                alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai');
+                return false;
+            }
+
+            if (pengumuman < selesai) {
+                e.preventDefault();
+                alert('Tanggal pengumuman tidak boleh lebih awal dari tanggal selesai');
+                return false;
             }
         }
     </script>

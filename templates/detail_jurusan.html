@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ jurusan.nama }} - SMK KARYA BANGSA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="jurusan-detail-container">
+        <div class="jurusan-hero">
+            <img src="{{ url_for('static', filename='img/jurusan/' + jurusan.image) }}" alt="{{ jurusan.nama }}">
+            <div class="hero-content">
+                <h1>{{ jurusan.nama }}</h1>
+                <p class="deskripsi">{{ jurusan.deskripsi }}</p>
+            </div>
+        </div>
+
+        <div class="jurusan-info-grid">
+            <div class="info-card">
+                <div class="card-header">
+                    <i class="fas fa-star"></i>
+                    <h2>Keunggulan Program</h2>
+                </div>
+                <ul class="feature-list">
+                    {% for keunggulan in jurusan.keunggulan %}
+                    <li><i class="fas fa-check-circle"></i> {{ keunggulan }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <div class="card-header">
+                    <i class="fas fa-briefcase"></i>
+                    <h2>Prospek Karir</h2>
+                </div>
+                <ul class="feature-list">
+                    {% for prospek in jurusan.prospek_kerja %}
+                    <li><i class="fas fa-check-circle"></i> {{ prospek }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <div class="card-header">
+                    <i class="fas fa-tools"></i>
+                    <h2>Fasilitas Pembelajaran</h2>
+                </div>
+                <ul class="feature-list">
+                    {% for fasilitas in jurusan.fasilitas %}
+                    <li><i class="fas fa-check-circle"></i> {{ fasilitas }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <a href="{{ url_for('home') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Daftar Sekarang
+            </a>
+        </div>
+    </div>
+</body>
+</html>
