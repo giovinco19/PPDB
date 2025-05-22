@@ -4,11 +4,20 @@ Sistem Informasi Penerimaan Peserta Didik Baru (PPDB) SMK KARYA BANGSA berbasis 
 
 ## Screenshots
 
-### Homepage - Section 1
-![Homepage Section 1](static/img/jurusan/Screenshot%202025-05-22%20104037.png)
+### Homepage - Hero Section
+![Homepage Hero](static/img/jurusan/Screenshot%202025-05-22%20104037.png)
 
-### Homepage - Section 2 
-![Homepage Section 2](static/img/Screenshot%202025-05-22%20104945.png)
+### Homepage - Program Jurusan 
+![Homepage Programs](static/img/Screenshot%202025-05-22%20104945.png)
+
+### Homepage - Features Section
+![Homepage Features](static/img/Screenshot%202025-05-22%20105028.png)
+
+### Homepage - Jadwal Section
+![Homepage Schedule](static/img/Screenshot%202025-05-22%20105052.png)
+
+### Homepage - CTA Section
+![Homepage CTA](static/img/Screenshot%202025-05-22%20105105.png)
 
 ## Fitur
 
