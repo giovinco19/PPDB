@@ -252,12 +252,13 @@ def admin_login():
         
         user = User.query.filter_by(username=username).first()
         
+        # Perbaikan logic pengecekan admin
         if user and user.role == 'admin' and check_password_hash(user.password, password):
             login_user(user)
-            flash('Login admin berhasil!')
+            flash('Login admin berhasil!', 'success')
             return redirect(url_for('admin_dashboard'))
         else:
-            flash('Username atau password admin salah!')
+            flash('Username atau password admin salah!', 'error')
     
     return render_template('admin_login.html')
 
