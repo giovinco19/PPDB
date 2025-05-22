@@ -4,26 +4,69 @@ Sistem Informasi Penerimaan Peserta Didik Baru (PPDB) SMK KARYA BANGSA berbasis 
 
 ## Screenshots
 
-### Homepage - Hero Section
+### 1. Halaman Publik
+#### Homepage - Hero Section
 ![Homepage Hero](static/img/jurusan/Screenshot%202025-05-22%20104037.png)
 
-### Homepage - Program Jurusan 
+#### Homepage - Program Jurusan 
 ![Homepage Programs](static/img/Screenshot%202025-05-22%20104945.png)
 
-### Homepage - Features Section 
+#### Homepage - Features Section 
 ![Homepage Features](static/img/Screenshot%202025-05-22%20105028.png)
 
-### Homepage - Progress Section
+#### Homepage - Progress Section
 ![Homepage Progress](static/img/Screenshot%202025-05-22%20105012.png)
 
-### Homepage - Jadwal Section
+#### Homepage - Jadwal Section
 ![Homepage Schedule](static/img/Screenshot%202025-05-22%20105052.png)
 
-### Homepage - CTA Section
+#### Homepage - CTA Section
 ![Homepage CTA](static/img/Screenshot%202025-05-22%20105105.png)
 
-### Login Page
+### 2. Autentikasi
+#### Login Page
 ![Login Page](static/img/Screenshot%202025-05-22%20112135.png)
+
+#### Register Page
+![Register Page](static/img/Screenshot%202025-05-22%20113012.png)
+
+### 3. Area Siswa
+#### Dashboard Siswa
+![User Dashboard](static/img/Screenshot%202025-05-22%20114843.png)
+
+#### Form Pendaftaran
+![Registration Form 1](static/img/Screenshot%202025-05-22%20115441.png)
+![Registration Form 2](static/img/Screenshot%202025-05-22%20115628.png)
+![Registration Form 3](static/img/Screenshot%202025-05-22%20115733.png)
+![Registration Form 4](static/img/Screenshot%202025-05-22%20115835.png)
+
+#### Status Pendaftaran
+![Form Submission Complete](static/img/Screenshot%202025-05-22%20120226.png)
+
+#### Halaman Pembayaran
+![Payment Page](static/img/Screenshot%202025-05-22%20120905.png)
+
+### 4. Area Admin
+#### Dashboard Admin
+![Admin Dashboard](static/img/Screenshot%202025-05-22%20121346.png)
+
+#### Detail Pendaftaran
+![Application Detail](static/img/Screenshot%202025-05-22%20121058.png)
+
+#### Manajemen Jadwal
+![Schedule Management](static/img/Screenshot%202025-05-22%20121109.png)
+
+#### Form Tambah Periode
+![Add Period Form](static/img/Screenshot%202025-05-22%20123218.png)
+
+#### Laporan dan Statistik
+##### Overview
+![Reports Overview](static/img/Screenshot%202025-05-22%20121122.png)
+
+##### Statistik Detail
+![Reports Detail 1](static/img/Screenshot%202025-05-22%20121245.png)
+![Reports Detail 2](static/img/Screenshot%202025-05-22%20121257.png)
+![Reports Detail 3](static/img/Screenshot%202025-05-22%20121325.png)
 
 ## Fitur
 
